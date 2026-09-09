@@ -83,6 +83,15 @@ function headingsOf(section) {
 
 /* -- page addressing ----------------------------------------------------- */
 
+/**
+ * A page built from a single section would print that section's heading right
+ * under the page title, which reads as the same heading twice. The page title
+ * already says it, so the heading is dropped and its content promoted.
+ */
+function dropsLeadHeading(page) {
+  return page.sections.length === 1 && page.sections[0].heading !== INTRO;
+}
+
 /** The URL directory a page is served from, e.g. /nuggs-multicharacter/config/. */
 function urlOf(productSlug, outDir, slug) {
   const parts = [productSlug, outDir, slug === 'index' ? '' : slug].filter(Boolean);
@@ -209,10 +218,20 @@ for (const product of manifest.products) {
 
     for (const section of doc.sections) {
       const page = owner.get(`${file}::${section.heading}`);
+      const dropped = page && dropsLeadHeading(page) ? section.heading : null;
+
       for (const h of headingsOf(section)) {
         const sourceAnchor = fileSlugger.slug(h.text);
         if (!page) continue;
         if (!pageSluggers.has(page)) pageSluggers.set(page, new GithubSlugger());
+
+        // A dropped heading has no anchor on the site, so links to it land at
+        // the top of the page that absorbed it.
+        if (h.level === 2 && h.text === dropped) {
+          anchors.set(`${file}#${sourceAnchor}`, { page, anchor: '' });
+          continue;
+        }
+
         const targetAnchor = pageSluggers.get(page).slug(h.text);
         anchors.set(`${file}#${sourceAnchor}`, { page, anchor: `#${targetAnchor}` });
       }
@@ -231,9 +250,14 @@ for (const product of manifest.products) {
   const linkRe = /\[([^\]]*)\]\((README|CONFIG|INTEGRATION|CHANGELOG)\.md(#[^)\s]*)?\)/g;
 
   for (const page of pages) {
+    const bare = dropsLeadHeading(page);
+
     const body = page.sections
       .map((s) =>
-        (s.heading === INTRO ? s.lines.join('\n') : `## ${s.heading}\n${s.lines.join('\n')}`).trim()
+        (s.heading === INTRO || bare
+          ? s.lines.join('\n')
+          : `## ${s.heading}\n${s.lines.join('\n')}`
+        ).trim()
       )
       .filter(Boolean)
       .join('\n\n');
