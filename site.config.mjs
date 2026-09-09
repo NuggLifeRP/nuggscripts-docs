@@ -16,7 +16,7 @@ export const SITE = {
   // Leave as null until the domain is bought and its DNS points here.
   // Set it to 'nuggscripts.com' and the site moves over with no other edits:
   // the site URL and the base path both follow from it. See the README.
-  domain: null,
+  domain: 'nuggscripts.com',
 
   // Optional. Any left null simply hides its button.
   discord: 'https://discord.gg/x4yKq6UATV',
