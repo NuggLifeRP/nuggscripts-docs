@@ -1,98 +1,128 @@
 {
-  "_comment": "Maps the markdown that ships inside each script folder onto pages of this site. Run `npm run sync` after editing a source doc, then commit the result.",
+  "_comment": "Maps sections of each script's markdown onto pages of this site. Local folder paths live in sources.local.json, which is gitignored and never published.",
   "products": [
     {
       "slug": "nuggs-multicharacter",
       "name": "nuggs_multicharacter",
-      "source": "C:/NuggGithub/Multicharacter/nuggs_multicharacter",
       "files": [
         {
           "file": "README.md",
-          "drop": ["Documentation", "Integrating with your own scripts"],
+          "drop": [
+            "Documentation",
+            "Integrating with your own scripts"
+          ],
           "pages": [
             {
               "slug": "index",
               "title": "nuggs_multicharacter",
               "description": "Character selection, creation and arrival points for ESX Legacy, QBCore and Qbox in a single resource.",
               "order": 1,
-              "sections": ["__intro__"]
+              "sections": [
+                "__intro__"
+              ]
             },
             {
               "slug": "installation",
               "title": "Installation",
               "description": "Requirements, the locked folder name, and every step of installing nuggs_multicharacter on ESX Legacy, QBCore or Qbox.",
               "order": 2,
-              "sections": ["The folder name is locked", "Requirements", "Install"]
+              "sections": [
+                "The folder name is locked",
+                "Requirements",
+                "Install"
+              ]
             },
             {
               "slug": "frameworks",
               "title": "Frameworks",
               "description": "How nuggs_multicharacter detects and adapts to ESX Legacy, QBCore and Qbox.",
               "order": 3,
-              "sections": ["Frameworks"]
+              "sections": [
+                "Frameworks"
+              ]
             },
             {
               "slug": "configuration",
               "title": "Configuration",
               "description": "How config.lua is organised, where secrets belong, languages, and what to check after an update.",
               "order": 4,
-              "sections": ["Configuration"]
+              "sections": [
+                "Configuration"
+              ]
             },
             {
               "slug": "arrival-points",
               "title": "Arrival points",
               "description": "Spawn location cards, camera framing and starting a character at their own property.",
               "order": 5,
-              "sections": ["Arrival points"]
+              "sections": [
+                "Arrival points"
+              ]
             },
             {
               "slug": "clothing-and-tattoos",
               "title": "Clothing and tattoos",
               "description": "Wiring nuggs_multicharacter to your clothing and tattoo resources so appearances persist everywhere.",
               "order": 6,
-              "sections": ["Clothing", "Tattoos"]
+              "sections": [
+                "Clothing",
+                "Tattoos"
+              ]
             },
             {
               "slug": "creator",
               "title": "The creator",
               "description": "The nine-step character creation editor and how it drives the live ped.",
               "order": 7,
-              "sections": ["The creator"]
+              "sections": [
+                "The creator"
+              ]
             },
             {
               "slug": "outfits",
               "title": "Outfits",
               "description": "Starter outfits, how they are stored, and handing them to your wardrobe resource.",
               "order": 8,
-              "sections": ["Outfits"]
+              "sections": [
+                "Outfits"
+              ]
             },
             {
               "slug": "membership",
               "title": "Membership and slots",
               "description": "Selling character slots through Tebex, granting them by Discord role, ACE or staff command, and what happens when a membership lapses.",
               "order": 9,
-              "sections": ["Membership, slots and the store"]
+              "sections": [
+                "Membership, slots and the store"
+              ]
             },
             {
               "slug": "commands",
               "title": "Commands",
               "description": "Every console and chat command nuggs_multicharacter registers, and who can run it.",
               "order": 10,
-              "sections": ["Commands"]
+              "sections": [
+                "Commands"
+              ]
             },
             {
               "slug": "theme",
               "title": "Theme, fonts and backdrop",
               "description": "Restyling the character screen with your own colours, fonts and backdrop art.",
               "order": 11,
-              "sections": ["Theme, fonts and backdrop"]
+              "sections": [
+                "Theme, fonts and backdrop"
+              ]
             },
             {
               "slug": "notes",
               "title": "Notes and limitations",
               "description": "Known limits, framework-specific behaviour, and the mcdiag command that answers most support questions.",
               "order": 12,
-              "sections": ["Notes and limitations", "Support"]
+              "sections": [
+                "Notes and limitations",
+                "Support"
+              ]
             }
           ]
         },
@@ -105,24 +135,171 @@
               "title": "Config reference",
               "description": "Every option in config.lua for nuggs_multicharacter, in the order it appears in the file.",
               "order": 1,
-              "sections": ["__intro__", "In-game helpers"]
+              "sections": [
+                "__intro__",
+                "In-game helpers"
+              ]
             },
-            { "slug": "general", "title": "1. General", "description": "Top-level nuggs_multicharacter options: locale, debug and core behaviour.", "order": 2, "sections": ["1. General"], "sectionNumber": 1 },
-            { "slug": "branding", "title": "2. Branding", "description": "The monogram shield and info panels on the character screen.", "order": 3, "sections": ["2. Branding"], "sectionNumber": 2 },
-            { "slug": "theme", "title": "3. Theme", "description": "Fonts, colours, colour tokens, layout and the shipped theme presets.", "order": 4, "sections": ["3. Theme"], "sectionNumber": 3 },
-            { "slug": "character-rules", "title": "4. Character rules", "description": "Config.Identity and Config.OutfitSlots — the rules new characters are created under.", "order": 5, "sections": ["4. Character rules"], "sectionNumber": 4 },
-            { "slug": "tattoos", "title": "5. Tattoos", "description": "Config.Tattoos, Config.TattooSets and Config.TattooPreview.", "order": 6, "sections": ["5. Tattoos"], "sectionNumber": 5 },
-            { "slug": "arrival-points", "title": "6. Arrival points", "description": "Spawn locations, art presets, preview framing, default spawns and housing integration.", "order": 7, "sections": ["6. Arrival points"], "sectionNumber": 6 },
-            { "slug": "clothing-resources", "title": "7. Clothing and tattoo resources", "description": "Pointing nuggs_multicharacter at your clothing and tattoo resources, including custom ones.", "order": 8, "sections": ["7. Clothing & tattoo resources"], "sectionNumber": 7 },
-            { "slug": "character-slots", "title": "8. Character slots", "description": "How many characters a player may own, and how the number is resolved.", "order": 9, "sections": ["8. Character slots"], "sectionNumber": 8 },
-            { "slug": "membership-tiers", "title": "9. Membership tiers", "description": "Defining membership tiers and the fields each one takes.", "order": 10, "sections": ["9. Membership tiers"], "sectionNumber": 9 },
-            { "slug": "store", "title": "10. Store (Tebex)", "description": "Connecting Tebex so purchased slots and tiers resolve automatically.", "order": 11, "sections": ["10. Store (Tebex)"], "sectionNumber": 10 },
-            { "slug": "discord-roles", "title": "11. Discord roles", "description": "Granting slots and tiers from Discord roles with a bot token.", "order": 12, "sections": ["11. Discord roles"], "sectionNumber": 11 },
-            { "slug": "database", "title": "12. Database and framework", "description": "Date format, character deletion sweeps, phone tables and QBCore/Qbox specifics.", "order": 13, "sections": ["12. Database & framework"], "sectionNumber": 12 },
-            { "slug": "starter-items", "title": "13. Starter items", "description": "What a brand new character is given on first spawn.", "order": 14, "sections": ["13. Starter items"], "sectionNumber": 13 },
-            { "slug": "scene", "title": "14. Scene", "description": "Backdrop, selection screen, creation screen, line-up poses and relog behaviour.", "order": 15, "sections": ["14. Scene"], "sectionNumber": 14 },
-            { "slug": "creation-steps", "title": "15. Creation steps", "description": "Building your own creator steps: step fields, control types and per-control fields.", "order": 16, "sections": ["15. Creation steps"], "sectionNumber": 15 },
-            { "slug": "creator-presets", "title": "16. Creator presets", "description": "Heritage, outfits, eye colours, defaults and randomiser keys.", "order": 17, "sections": ["16. Creator presets"], "sectionNumber": 16 }
+            {
+              "slug": "general",
+              "title": "1. General",
+              "description": "Top-level nuggs_multicharacter options: locale, debug and core behaviour.",
+              "order": 2,
+              "sections": [
+                "1. General"
+              ],
+              "sectionNumber": 1
+            },
+            {
+              "slug": "branding",
+              "title": "2. Branding",
+              "description": "The monogram shield and info panels on the character screen.",
+              "order": 3,
+              "sections": [
+                "2. Branding"
+              ],
+              "sectionNumber": 2
+            },
+            {
+              "slug": "theme",
+              "title": "3. Theme",
+              "description": "Fonts, colours, colour tokens, layout and the shipped theme presets.",
+              "order": 4,
+              "sections": [
+                "3. Theme"
+              ],
+              "sectionNumber": 3
+            },
+            {
+              "slug": "character-rules",
+              "title": "4. Character rules",
+              "description": "Config.Identity and Config.OutfitSlots — the rules new characters are created under.",
+              "order": 5,
+              "sections": [
+                "4. Character rules"
+              ],
+              "sectionNumber": 4
+            },
+            {
+              "slug": "tattoos",
+              "title": "5. Tattoos",
+              "description": "Config.Tattoos, Config.TattooSets and Config.TattooPreview.",
+              "order": 6,
+              "sections": [
+                "5. Tattoos"
+              ],
+              "sectionNumber": 5
+            },
+            {
+              "slug": "arrival-points",
+              "title": "6. Arrival points",
+              "description": "Spawn locations, art presets, preview framing, default spawns and housing integration.",
+              "order": 7,
+              "sections": [
+                "6. Arrival points"
+              ],
+              "sectionNumber": 6
+            },
+            {
+              "slug": "clothing-resources",
+              "title": "7. Clothing and tattoo resources",
+              "description": "Pointing nuggs_multicharacter at your clothing and tattoo resources, including custom ones.",
+              "order": 8,
+              "sections": [
+                "7. Clothing & tattoo resources"
+              ],
+              "sectionNumber": 7
+            },
+            {
+              "slug": "character-slots",
+              "title": "8. Character slots",
+              "description": "How many characters a player may own, and how the number is resolved.",
+              "order": 9,
+              "sections": [
+                "8. Character slots"
+              ],
+              "sectionNumber": 8
+            },
+            {
+              "slug": "membership-tiers",
+              "title": "9. Membership tiers",
+              "description": "Defining membership tiers and the fields each one takes.",
+              "order": 10,
+              "sections": [
+                "9. Membership tiers"
+              ],
+              "sectionNumber": 9
+            },
+            {
+              "slug": "store",
+              "title": "10. Store (Tebex)",
+              "description": "Connecting Tebex so purchased slots and tiers resolve automatically.",
+              "order": 11,
+              "sections": [
+                "10. Store (Tebex)"
+              ],
+              "sectionNumber": 10
+            },
+            {
+              "slug": "discord-roles",
+              "title": "11. Discord roles",
+              "description": "Granting slots and tiers from Discord roles with a bot token.",
+              "order": 12,
+              "sections": [
+                "11. Discord roles"
+              ],
+              "sectionNumber": 11
+            },
+            {
+              "slug": "database",
+              "title": "12. Database and framework",
+              "description": "Date format, character deletion sweeps, phone tables and QBCore/Qbox specifics.",
+              "order": 13,
+              "sections": [
+                "12. Database & framework"
+              ],
+              "sectionNumber": 12
+            },
+            {
+              "slug": "starter-items",
+              "title": "13. Starter items",
+              "description": "What a brand new character is given on first spawn.",
+              "order": 14,
+              "sections": [
+                "13. Starter items"
+              ],
+              "sectionNumber": 13
+            },
+            {
+              "slug": "scene",
+              "title": "14. Scene",
+              "description": "Backdrop, selection screen, creation screen, line-up poses and relog behaviour.",
+              "order": 15,
+              "sections": [
+                "14. Scene"
+              ],
+              "sectionNumber": 14
+            },
+            {
+              "slug": "creation-steps",
+              "title": "15. Creation steps",
+              "description": "Building your own creator steps: step fields, control types and per-control fields.",
+              "order": 16,
+              "sections": [
+                "15. Creation steps"
+              ],
+              "sectionNumber": 15
+            },
+            {
+              "slug": "creator-presets",
+              "title": "16. Creator presets",
+              "description": "Heritage, outfits, eye colours, defaults and randomiser keys.",
+              "order": 17,
+              "sections": [
+                "16. Creator presets"
+              ],
+              "sectionNumber": 16
+            }
           ]
         },
         {
@@ -134,35 +311,49 @@
               "title": "Integration",
               "description": "What you may safely edit in nuggs_multicharacter, and how it sits alongside the rest of your server.",
               "order": 1,
-              "sections": ["__intro__", "What you may edit", "Compatibility"]
+              "sections": [
+                "__intro__",
+                "What you may edit",
+                "Compatibility"
+              ]
             },
             {
               "slug": "exports",
               "title": "Exports",
               "description": "Every server and client export nuggs_multicharacter provides, with arguments and return values.",
               "order": 2,
-              "sections": ["Two kinds of key", "Server exports", "Client exports"]
+              "sections": [
+                "Two kinds of key",
+                "Server exports",
+                "Client exports"
+              ]
             },
             {
               "slug": "events",
               "title": "Events",
               "description": "Server and client events you can listen for, and the internal ones you must never trigger.",
               "order": 3,
-              "sections": ["Events"]
+              "sections": [
+                "Events"
+              ]
             },
             {
               "slug": "recipes",
               "title": "Recipes",
               "description": "Worked examples: granting slots from an admin menu, gating a queue, loading starter outfits and auditing new characters.",
               "order": 4,
-              "sections": ["Recipes"]
+              "sections": [
+                "Recipes"
+              ]
             },
             {
               "slug": "languages",
               "title": "Adding a language",
               "description": "Translating nuggs_multicharacter, what the resource handles for you, and what cannot be translated.",
               "order": 5,
-              "sections": ["Adding a language"]
+              "sections": [
+                "Adding a language"
+              ]
             }
           ]
         },
@@ -175,7 +366,9 @@
               "title": "Troubleshooting",
               "description": "Fixes for startup and framework errors, duplicate screens, clothing and tattoo problems, arrival points, camera issues and membership wiring.",
               "order": 13,
-              "sections": ["Troubleshooting"]
+              "sections": [
+                "Troubleshooting"
+              ]
             }
           ]
         },

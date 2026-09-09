@@ -1,0 +1,12 @@
+{
+  "_comment": "Copy this to sources.local.json and fill in the paths on YOUR machine. sources.local.json is gitignored and never leaves this computer — no local path is ever committed to the public repository.",
+  "products": {
+    "nuggs-multicharacter": "<absolute path to the nuggs_multicharacter folder>"
+  },
+  "assets": {
+    "logo": "<absolute path to NuggScriptsLogo.png>",
+    "thumbnails": {
+      "nuggs-multicharacter": "<absolute path to the product thumbnail image>"
+    }
+  }
+}

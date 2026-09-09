@@ -52,6 +52,13 @@ const SECRET_PATTERNS = [
   [/\b(?!0{8}|x{8})[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/, 'UUID that may be a live secret'],
 ];
 
+// No path from the build machine may ever be published.
+const PATH_PATTERNS = [
+  [/\b[A-Za-z]:[\\/](?:[\w .~-]+[\\/])*[\w .~-]*/, 'a Windows path'],
+  [/\/(?:Users|home)\/[\w.~-]+\//, 'a home-directory path'],
+  [/\\\\[\w.-]+\\[\w$.-]+/, 'a UNC network path'],
+];
+
 // A documentation example is short. A dump of the product is not.
 const MAX_CODE_BLOCK_LINES = 60;
 
@@ -81,6 +88,18 @@ for (const file of tracked) {
     const hit = text.match(pattern);
     if (hit) {
       problems.push(`${file}: looks like a ${label} — "${hit[0].slice(0, 12)}…"`);
+    }
+  }
+
+  // The example file has to show the shape of a path setting, so it is exempt.
+  if (file !== 'sources.local.example.json') {
+    for (const [pattern, label] of PATH_PATTERNS) {
+      const hit = text.match(pattern);
+      if (hit) {
+        problems.push(
+          `${file}: ${label} from this machine — "${hit[0].slice(0, 30)}" — must never be published`
+        );
+      }
     }
   }
 

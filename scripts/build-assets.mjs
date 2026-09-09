@@ -1,8 +1,29 @@
 import sharp from 'sharp';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 
-const LOGO = 'C:/NuggGithub/NuggScriptsLogo.png';
-const THUMB = 'C:/NuggGithub/Multicharacter/NuggsMulticharacterThumbnail.jpg';
+// Source image locations live in sources.local.json, which is gitignored, so no
+// path from this machine is ever published.
+const LOCAL = path.join(path.resolve(import.meta.dirname, '..'), 'sources.local.json');
+if (!existsSync(LOCAL)) {
+  console.error(
+    'sources.local.json not found. Copy sources.local.example.json to ' +
+      'sources.local.json and point it at the source images on this machine.'
+  );
+  process.exit(1);
+}
+const local = JSON.parse(await readFile(LOCAL, 'utf8'));
+
+const LOGO = local.assets?.logo;
+const THUMB = local.assets?.thumbnails?.['nuggs-multicharacter'];
+
+for (const [label, file] of [['logo', LOGO], ['thumbnail', THUMB]]) {
+  if (!file || !existsSync(file)) {
+    console.error(`the ${label} named in sources.local.json was not found`);
+    process.exit(1);
+  }
+}
 
 await mkdir('src/assets', { recursive: true });
 await mkdir('public', { recursive: true });

@@ -36,3 +36,8 @@ __resource.lua
 install.sql
 config.lua
 server.cfg
+
+# Local machine paths — never published.
+sources.local.json
+*.local.json
+!sources.local.example.json

@@ -17,6 +17,8 @@ import GithubSlugger from 'github-slugger';
 const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT_ROOT = path.join(ROOT, 'src', 'content', 'docs');
 const MANIFEST = path.join(ROOT, 'docs.sources.json');
+// Local folder paths are kept out of the public repository entirely.
+const LOCAL = path.join(ROOT, 'sources.local.json');
 const INTRO = '__intro__';
 
 const warnings = [];
@@ -107,11 +109,28 @@ const yaml = (s) => `"${String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
 /* -- build --------------------------------------------------------------- */
 
 const manifest = JSON.parse(await readFile(MANIFEST, 'utf8'));
+
+if (!existsSync(LOCAL)) {
+  console.error(
+    'sources.local.json not found.\n' +
+      'Copy sources.local.example.json to sources.local.json and point it at the\n' +
+      'script folders on this machine. It is gitignored, so those paths are never\n' +
+      'published.'
+  );
+  process.exit(1);
+}
+const local = JSON.parse(await readFile(LOCAL, 'utf8'));
+
 let written = 0;
 
 for (const product of manifest.products) {
-  if (!existsSync(product.source)) {
-    warn(`source folder missing for ${product.slug}: ${product.source}`);
+  const source = local.products?.[product.slug];
+  if (!source) {
+    warn(`${product.slug}: no folder for it in sources.local.json`);
+    continue;
+  }
+  if (!existsSync(source)) {
+    warn(`${product.slug}: the folder named in sources.local.json does not exist`);
     continue;
   }
 
@@ -121,9 +140,9 @@ for (const product of manifest.products) {
   const docs = new Map();
   for (const spec of product.files) {
     if (docs.has(spec.file)) continue;
-    const full = path.join(product.source, spec.file);
+    const full = path.join(source, spec.file);
     if (!existsSync(full)) {
-      warn(`${product.slug}: ${spec.file} not found in ${product.source}`);
+      warn(`${product.slug}: ${spec.file} is not in the folder named in sources.local.json`);
       continue;
     }
     docs.set(spec.file, parse(await readFile(full, 'utf8')));
