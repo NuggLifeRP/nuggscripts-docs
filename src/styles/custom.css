@@ -56,6 +56,9 @@
   --sl-color-bg: #ffffff;
   --sl-color-bg-nav: rgba(255, 255, 255, 0.9);
   --sl-color-bg-sidebar: #faf8fc;
+  /* Without this, light mode inherits the dark inline-code background and the
+     code becomes unreadable. */
+  --sl-color-bg-inline-code: #f3eef7;
   --sl-color-hairline-light: #e6dfeb;
 }
 
@@ -117,7 +120,7 @@ header.header {
 
 .hero img {
   filter: drop-shadow(0 0 3rem rgba(255, 45, 149, 0.35));
-  max-height: 22rem;
+  max-height: 30rem;
   width: auto;
 }
 

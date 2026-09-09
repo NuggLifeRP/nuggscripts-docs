@@ -52,6 +52,13 @@ const SECRET_PATTERNS = [
   [/\b(?!0{8}|x{8})[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/, 'UUID that may be a live secret'],
 ];
 
+// Discord IDs (guild, role, channel, user) are 17-19 digit snowflakes, so a
+// real one copied out of a live server console must never reach the public
+// site. A snowflake encodes a timestamp and so never starts with a zero, which
+// makes a leading zero the safe way to write an example. A run of one repeated
+// digit is allowed too.
+const SNOWFLAKE = /\b(?!0)(?!(\d)\1{16,18}\b)\d{17,19}\b/;
+
 // No path from the build machine may ever be published.
 const PATH_PATTERNS = [
   [/\b[A-Za-z]:[\\/](?:[\w .~-]+[\\/])*[\w .~-]*/, 'a Windows path'],
@@ -88,6 +95,15 @@ for (const file of tracked) {
     const hit = text.match(pattern);
     if (hit) {
       problems.push(`${file}: looks like a ${label} — "${hit[0].slice(0, 12)}…"`);
+    }
+  }
+
+  if (/\.mdx?$/i.test(file)) {
+    const hit = text.match(SNOWFLAKE);
+    if (hit) {
+      problems.push(
+        `${file}: "${hit[0]}" looks like a real Discord ID — replace it with a repeated-digit placeholder`
+      );
     }
   }
 

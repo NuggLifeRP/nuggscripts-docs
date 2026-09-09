@@ -119,8 +119,8 @@ The startup banner prints every role in your guild next to what it grants:
 ```
 [INFO] discord roles  12 in server 000000000000000000
 [INFO]   Bronze Member            000000000000000000  tier bronze
-[INFO]   Server Booster           1320599557452599351  +1 slot(s)
-[INFO]   Verified                 1320599557452599352  -
+[INFO]   Server Booster           000000000000000001  +1 slot(s)
+[INFO]   Verified                 000000000000000002  -
 ```
 
 `mcperks discord <playerId>` does the same for one player, bypassing both caches.

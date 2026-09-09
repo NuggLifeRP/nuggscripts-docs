@@ -32,10 +32,17 @@ const logo = sharp(LOGO);
 const { width, height } = await logo.metadata();
 console.log(`logo source ${width}x${height}`);
 
+// Starlight hard-codes a 400x400 hero image, so a portrait logo gets cropped
+// top and bottom. Pad it to a square first and the whole logo survives.
 await sharp(LOGO)
-  .resize({ width: 900 })
+  .resize({
+    width: 1000,
+    height: 1000,
+    fit: 'contain',
+    background: { r: 0, g: 0, b: 0, alpha: 0 },
+  })
   .png({ quality: 90, compressionLevel: 9 })
-  .toFile('src/assets/logo-full.png');
+  .toFile('src/assets/logo-hero.png');
 
 const markHeight = Math.round(height * 0.63);
 await sharp(LOGO)
