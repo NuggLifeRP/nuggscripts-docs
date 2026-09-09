@@ -28,6 +28,11 @@ jobs:
 
       - run: npm ci
 
+      # This repository is public and the scripts it documents are paid
+      # products. Fail before building if anything but documentation is here.
+      - name: Documentation only — no product source, no credentials
+        run: npm run check:source
+
       - run: npm run build
 
       # Fails the deploy rather than shipping a page with dead links.

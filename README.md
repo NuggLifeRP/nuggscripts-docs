@@ -3,6 +3,32 @@
 The customer-facing documentation site for the NuggScripts FiveM resources, built with
 [Astro Starlight](https://starlight.astro.build) and deployed to GitHub Pages.
 
+## Documentation only
+
+**This repository is public. The scripts it documents are paid, escrowed
+products. Nothing but documentation may ever be committed here** — no `.lua`,
+no `.sql`, no `fxmanifest.lua`, no stream assets, no credentials.
+
+Two things enforce that:
+
+- `.gitignore` blocks every resource file type, so they cannot be staged by
+  accident.
+- `npm run check:source` inspects what git actually tracks and fails on a
+  blocked file type, a credential-shaped string, or a code block long enough to
+  be a source dump rather than an example. It runs in CI **before** the build,
+  so a mistake fails the deploy instead of publishing.
+
+Run it yourself before any push:
+
+```bash
+npm run check:source
+```
+
+The Lua in these pages is limited to short usage examples — the same snippets
+that ship to customers in the zip. `docs.sources.json` contains the local path
+to each script folder, which is visible but discloses nothing beyond a folder
+name on the build machine.
+
 ## How content works
 
 **The script folders are the source of truth.** Each resource keeps its full
@@ -60,6 +86,7 @@ dropped.
 | `npm run sync` | Regenerate pages from the script folders |
 | `npm run dev` | Local preview with hot reload |
 | `npm run build` | Production build into `dist/` |
+| `npm run check:source` | Confirm the repo holds documentation only |
 | `npm run check:links` | Verify every internal link and anchor in `dist/` |
 | `node scripts/build-assets.mjs` | Rebuild the logo, favicon and social cards |
 

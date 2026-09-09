@@ -3,3 +3,36 @@ dist/
 .astro/
 .DS_Store
 npm-debug.log*
+
+# This repository is PUBLIC and must contain documentation only. The scripts it
+# documents are paid, escrowed products. These patterns stop resource files
+# being committed by accident; `npm run check:source` is the real backstop and
+# runs in CI before every deploy.
+*.lua
+*.sql
+*.fxap
+*.rpf
+*.ytd
+*.ydr
+*.ydd
+*.yft
+*.ymap
+*.ytyp
+*.ybn
+*.ynv
+*.ynd
+*.ycd
+*.awc
+*.zip
+*.rar
+*.7z
+*.dll
+*.exe
+*.env
+*.pem
+*.key
+fxmanifest.lua
+__resource.lua
+install.sql
+config.lua
+server.cfg
