@@ -1,0 +1,104 @@
+---
+title: NuggAssassin
+description: Official documentation for NuggAssassin FiveM scripts — install guides, full config references, exports and troubleshooting.
+template: splash
+editUrl: false
+lastUpdated: false
+hero:
+  tagline: Documentation for every NuggAssassin script — install steps, every config option, exports, and the fixes for what usually goes wrong.
+  image:
+    file: ../../assets/logo-full.png
+  actions:
+    - text: Start here
+      link: start/before-you-install/
+      icon: right-arrow
+      variant: primary
+    - text: nuggs_multicharacter
+      link: nuggs-multicharacter/
+      icon: open-book
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+import { SITE } from '../../../site.config.mjs';
+import multicharacter from '../../assets/multicharacter.jpg';
+
+## Scripts
+
+<div class="product-grid">
+  <a class="product-card" href="nuggs-multicharacter/">
+    <img src={multicharacter.src} alt="nuggs_multicharacter character selection screen" loading="lazy" />
+    <div class="product-body">
+      <h3>nuggs_multicharacter</h3>
+      <p>
+        Character selection, character creation and arrival points in one resource.
+        Your characters stand side by side as real peds, a nine-step creator drives
+        the live ped, and slots are sold through Tebex or granted by Discord role.
+      </p>
+      <div class="product-tags">
+        <span class="product-tag">ESX Legacy</span>
+        <span class="product-tag">QBCore</span>
+        <span class="product-tag">Qbox</span>
+      </div>
+    </div>
+  </a>
+
+  <div class="product-card product-card--soon">
+    <div class="product-body">
+      <h3>nuggs_bank</h3>
+      <p>Banking, accounts and cards. Documentation lands with the release.</p>
+      <div class="product-tags"><span class="product-tag">In development</span></div>
+    </div>
+  </div>
+
+  <div class="product-card product-card--soon">
+    <div class="product-body">
+      <h3>nuggs_vipshop</h3>
+      <p>VIP store and membership perks. Documentation lands with the release.</p>
+      <div class="product-tags"><span class="product-tag">In development</span></div>
+    </div>
+  </div>
+</div>
+
+## New here?
+
+<CardGrid>
+  <Card title="Before you install" icon="approve-check">
+    The artifact version, OneSync mode and database every script assumes.
+    [Check your server first](start/before-you-install/).
+  </Card>
+  <Card title="Downloading your purchase" icon="cloud-download">
+    Where your files live after buying, and the unzip mistake that breaks
+    installs. [Get your files](start/downloading/).
+  </Card>
+  <Card title="Common install mistakes" icon="warning">
+    The handful of problems behind most support tickets, with the fix for each.
+    [Read the list](start/common-mistakes/).
+  </Card>
+  <Card title="Getting support" icon="comment">
+    What to send so the first reply solves it. [How to ask](start/support/).
+  </Card>
+</CardGrid>
+
+{(SITE.store || SITE.discord || SITE.youtube) && (
+  <>
+    <h2>Elsewhere</h2>
+    <CardGrid>
+      {SITE.store && (
+        <Card title="Store" icon="star">
+          <p>Browse and buy the scripts. <a href={SITE.store}>Open the store</a>.</p>
+        </Card>
+      )}
+      {SITE.discord && (
+        <Card title="Discord" icon="discord">
+          <p>Support tickets, release notes and previews. <a href={SITE.discord}>Join the server</a>.</p>
+        </Card>
+      )}
+      {SITE.youtube && (
+        <Card title="YouTube" icon="youtube">
+          <p>Showcases and setup walkthroughs. <a href={SITE.youtube}>Watch</a>.</p>
+        </Card>
+      )}
+    </CardGrid>
+  </>
+)}

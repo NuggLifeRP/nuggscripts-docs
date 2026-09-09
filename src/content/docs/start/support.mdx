@@ -1,0 +1,68 @@
+---
+title: Getting support
+description: What to send with a NuggAssassin support ticket so the first reply solves it, including the built-in diagnostic commands.
+sidebar:
+  order: 4
+---
+
+import { SITE } from '../../../../site.config.mjs';
+
+Support is fastest when the first message contains everything needed to answer
+it. Below is what that looks like.
+
+## Run the diagnostic first
+
+Every NuggAssassin script ships a diagnostic command that reports the framework,
+the related resources it resolved, the database connection, and every problem it
+found in your config. For `nuggs_multicharacter` that command is:
+
+```
+mcdiag
+```
+
+Run it in the **server console** and paste the whole output. It answers most of a
+support conversation in a single message, and quite often it answers your
+question before you send anything.
+
+## What to include
+
+1. **The diagnostic output**, in full.
+2. **The server console** from startup through the error — the startup banner is
+   part of this and is often the whole answer.
+3. **The client console** (`F8` in game) if the problem is visual: a screen that
+   will not open, a UI that flickers, art that does not load.
+4. **What you expected and what happened instead**, in one sentence each.
+5. **Your framework and artifact build.**
+
+## How to paste it
+
+Console output as **text**, not a screenshot. Screenshots of text cannot be
+searched, cannot be copied out of, and usually crop the line that mattered. If it
+is long, use a paste service and send the link.
+
+Send your `config.lua` if the question touches configuration — but **remove your
+tokens and secrets first**, or better, keep them in `server.cfg` where they
+belong and there is nothing to remove.
+
+## Where to send it
+
+{SITE.discord ? (
+  <p>
+    Open a ticket in the <a href={SITE.discord}>Discord server</a>. Tickets are
+    handled in order, and one with the diagnostic output attached tends to be
+    resolved in the first reply.
+  </p>
+) : (
+  <p>
+    Open a ticket in the Discord server linked from your store page. Tickets are
+    handled in order, and one with the diagnostic output attached tends to be
+    resolved in the first reply.
+  </p>
+)}
+
+## Before you do
+
+Check the troubleshooting page for your script. It is organised by symptom, and
+it covers the problems that come up repeatedly:
+
+- [nuggs_multicharacter troubleshooting](../../nuggs-multicharacter/troubleshooting/)
