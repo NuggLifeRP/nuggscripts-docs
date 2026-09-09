@@ -39,6 +39,16 @@ export default defineConfig({
         { tag: 'meta', attrs: { property: 'og:image', content: `${SITE_URL}${BASE_PATH === '/' ? '' : BASE_PATH}/og-default.jpg` } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
         { tag: 'meta', attrs: { name: 'theme-color', content: '#0b0710' } },
+        {
+          // Open links that leave the site in a new tab, so the docs stay put.
+          // Done here rather than with a markdown plugin because Starlight
+          // renders the header social icons and the "Edit page" link itself,
+          // which a markdown plugin never sees. Internal links are untouched,
+          // so navigating the documentation never spawns tabs, and any link
+          // already carrying a target is left alone.
+          tag: 'script',
+          content: `addEventListener('DOMContentLoaded',()=>{for(const a of document.querySelectorAll('a[href]')){if(a.target)continue;let u;try{u=new URL(a.href,location.href)}catch{continue}if(u.origin===location.origin)continue;if(u.protocol!=='https:'&&u.protocol!=='http:')continue;a.target='_blank';a.rel=(a.rel?a.rel+' ':'')+'noopener noreferrer'}});`,
+        },
       ],
       sidebar: [
         {

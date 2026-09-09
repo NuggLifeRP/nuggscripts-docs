@@ -86,17 +86,17 @@ import multicharacter from '../../assets/multicharacter.jpg';
     <CardGrid>
       {SITE.store && (
         <Card title="Store" icon="star">
-          <p>Browse and buy the scripts. <a href={SITE.store}>Open the store</a>.</p>
+          <p>Browse and buy the scripts. <a href={SITE.store} target="_blank" rel="noopener noreferrer">Open the store</a>.</p>
         </Card>
       )}
       {SITE.discord && (
         <Card title="Discord" icon="discord">
-          <p>Support tickets, release notes and previews. <a href={SITE.discord}>Join the server</a>.</p>
+          <p>Support tickets, release notes and previews. <a href={SITE.discord} target="_blank" rel="noopener noreferrer">Join the server</a>.</p>
         </Card>
       )}
       {SITE.youtube && (
         <Card title="YouTube" icon="youtube">
-          <p>Showcases and setup walkthroughs. <a href={SITE.youtube}>Watch</a>.</p>
+          <p>Showcases and setup walkthroughs. <a href={SITE.youtube} target="_blank" rel="noopener noreferrer">Watch</a>.</p>
         </Card>
       )}
     </CardGrid>
