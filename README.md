@@ -1,6 +1,6 @@
-# NuggAssassin docs
+# NuggScripts docs
 
-The customer-facing documentation site for NuggAssassin FiveM scripts, built with
+The customer-facing documentation site for the NuggScripts FiveM resources, built with
 [Astro Starlight](https://starlight.astro.build) and deployed to GitHub Pages.
 
 ## How content works
@@ -69,15 +69,39 @@ Everything identity-related lives in `site.config.mjs` — GitHub account, repo
 name, domain, Discord, store and YouTube links. Nothing else needs editing when
 one of them changes.
 
-### Moving to a custom domain
+### Moving to nuggscripts.com
 
-1. Set `domain: 'docs.nuggscripts.com'` in `site.config.mjs`. The site URL and base
-   path both follow automatically.
-2. Add `public/CNAME` containing that hostname on one line.
-3. Point a `CNAME` DNS record at `<user>.github.io`.
-4. In the repository's **Settings → Pages**, enter the domain and enable
-   *Enforce HTTPS*.
-5. Run `npm run sync` and rebuild.
+The site is served from the apex, so this needs A/AAAA records — an apex domain
+cannot use a `CNAME` record.
+
+1. Set `domain: 'nuggscripts.com'` in `site.config.mjs`. The site URL and the
+   base path both follow automatically.
+2. Add `public/CNAME` containing `nuggscripts.com` on one line.
+3. At the DNS host, add four A records for `@`, all **DNS-only** (grey cloud on
+   Cloudflare — proxying breaks GitHub's certificate issuance):
+
+   ```
+   185.199.108.153
+   185.199.109.153
+   185.199.110.153
+   185.199.111.153
+   ```
+
+   And, for IPv6, four AAAA records for `@`:
+
+   ```
+   2606:50c0:8000::153
+   2606:50c0:8001::153
+   2606:50c0:8002::153
+   2606:50c0:8003::153
+   ```
+
+   Optionally add a `CNAME` for `www` pointing at `nuggliferp.github.io` so
+   `www.nuggscripts.com` works too.
+4. In the repository's **Settings → Pages**, enter `nuggscripts.com` as the
+   custom domain, wait for the DNS check to pass, then tick *Enforce HTTPS*.
+   The certificate takes a few minutes.
+5. Rebuild and push.
 
 Internal links are written relative to the page, so they survive the base path
 changing from `/nuggscripts-docs` to `/`.

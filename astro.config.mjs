@@ -25,7 +25,7 @@ export default defineConfig({
       description: SITE.description,
       logo: {
         src: './src/assets/logo-mark.png',
-        alt: 'NuggAssassin',
+        alt: 'NuggScripts',
       },
       favicon: '/favicon.png',
       social,

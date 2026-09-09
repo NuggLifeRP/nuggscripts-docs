@@ -1,11 +1,11 @@
 ---
 title: Before you install
-description: The server artifact, OneSync mode, database and framework every NuggAssassin script assumes — and how to check each one in under a minute.
+description: The server artifact, OneSync mode, database and framework every NuggScripts resource assumes — and how to check each one in under a minute.
 sidebar:
   order: 1
 ---
 
-Five minutes here saves an evening of support tickets. Every NuggAssassin script
+Five minutes here saves an evening of support tickets. Every NuggScripts resource
 assumes the same baseline, and almost every "it will not start" report turns out
 to be one of these four things.
 
@@ -62,7 +62,7 @@ you do not tell them.
 
 ## What you do not need
 
-- **`nugg_bridge` is not required.** Some NuggAssassin scripts use it, some carry
+- **`nugg_bridge` is not required.** Some NuggScripts resources use it, some carry
   their own framework layer instead. Where a script does not use it, installing
   it changes nothing and removing it breaks nothing. Each script's page says
   which applies.

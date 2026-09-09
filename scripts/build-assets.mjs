@@ -1,7 +1,7 @@
 import sharp from 'sharp';
 import { mkdir } from 'node:fs/promises';
 
-const LOGO = 'C:/NuggGithub/Multicharacter/NuggAssassinLogo.png';
+const LOGO = 'C:/NuggGithub/NuggScriptsLogo.png';
 const THUMB = 'C:/NuggGithub/Multicharacter/NuggsMulticharacterThumbnail.jpg';
 
 await mkdir('src/assets', { recursive: true });

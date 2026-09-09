@@ -1,6 +1,6 @@
 ---
 title: Common install mistakes
-description: The handful of problems behind most NuggAssassin support tickets — wrong folder name, start order, a second script still running — and the fix for each.
+description: The handful of problems behind most NuggScripts support tickets — wrong folder name, start order, a second script still running — and the fix for each.
 sidebar:
   order: 3
 ---
@@ -54,13 +54,13 @@ will be.
 **Symptom:** the resource starts, but nothing persists between restarts.
 
 **Fix:** confirm `oxmysql` is running and that its connection string points at
-the database your framework actually uses. NuggAssassin scripts create the tables
+the database your framework actually uses. NuggScripts resources create the tables
 they own on first start — you do not import SQL by hand — but they cannot do that
 without a working connection.
 
 ## Reading the startup banner
 
-Every NuggAssassin script prints a banner when it starts, naming the framework it
+Every NuggScripts resource prints a banner when it starts, naming the framework it
 detected, the related resources it found, and every problem it spotted in your
 config. It is the fastest diagnosis available and it costs nothing to read.
 

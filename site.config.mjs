@@ -3,10 +3,10 @@
 // follows automatically.
 
 export const SITE = {
-  title: 'NuggAssassin',
+  title: 'NuggScripts',
   tagline: 'FiveM script documentation',
   description:
-    'Official documentation for NuggAssassin FiveM scripts — install guides, full config references, exports and troubleshooting.',
+    'Official documentation for the NuggScripts FiveM resources — install guides, full config references, exports and troubleshooting.',
 
   // GitHub account that owns the docs repository.
   githubUser: 'NuggLifeRP',
@@ -14,7 +14,8 @@ export const SITE = {
   branch: 'main',
 
   // Leave as null until the domain is bought and its DNS points here.
-  // Set it to 'docs.nuggscripts.com' and the site moves over with no other edits.
+  // Set it to 'nuggscripts.com' and the site moves over with no other edits:
+  // the site URL and the base path both follow from it. See the README.
   domain: null,
 
   // Optional. Any left null simply hides its button.

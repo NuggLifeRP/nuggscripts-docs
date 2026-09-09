@@ -1,6 +1,6 @@
 ---
 title: Downloading your purchase
-description: Where your NuggAssassin script files live after buying, how to unzip them without breaking the folder name, and where they go on the server.
+description: Where your NuggScripts files live after buying, how to unzip them without breaking the folder name, and where they go on the server.
 sidebar:
   order: 2
 ---
