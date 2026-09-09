@@ -29,6 +29,8 @@ export default defineConfig({
       },
       favicon: '/favicon.png',
       social,
+      // Appends a store icon to the header's social links.
+      components: { SocialIcons: './src/components/SocialIcons.astro' },
       editLink: { baseUrl: EDIT_BASE },
       customCss: ['./src/styles/custom.css'],
       lastUpdated: true,

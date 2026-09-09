@@ -1,0 +1,41 @@
+---
+// Adds a store link beside the GitHub and Discord icons in the header.
+// Starlight's `social` config only accepts its own built-in icon names and
+// there is no cart or store icon among them, so this override renders the
+// default icons and appends one of our own.
+import Default from '@astrojs/starlight/components/SocialIcons.astro';
+import { SITE } from '../../site.config.mjs';
+---
+
+<Default><slot /></Default>
+
+{
+  SITE.store && (
+    <a href={SITE.store} target="_blank" rel="noopener noreferrer" class="sl-flex store-link">
+      <span class="sr-only">Store</span>
+      <svg
+        aria-hidden="true"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        style="--sl-icon-size: 1em;"
+      >
+        <path d="M7.5 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm9 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM2 3a1 1 0 0 0 0 2h1.6l2.9 9.4A2 2 0 0 0 8.4 16h9.2a2 2 0 0 0 1.9-1.4l2.3-7A1 1 0 0 0 20.9 6H6.2l-.7-2.3A1 1 0 0 0 4.6 3H2Z" />
+      </svg>
+    </a>
+  )
+}
+
+<style>
+  /* Matches the padding, colour and hover of Starlight's own social icons. */
+  .store-link {
+    color: var(--sl-color-text-accent);
+    padding: 0.5em;
+    margin: -0.5em;
+  }
+
+  .store-link:hover {
+    color: var(--sl-color-white);
+  }
+</style>
