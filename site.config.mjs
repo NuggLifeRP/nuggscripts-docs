@@ -9,16 +9,16 @@ export const SITE = {
     'Official documentation for NuggAssassin FiveM scripts — install guides, full config references, exports and troubleshooting.',
 
   // GitHub account that owns the docs repository.
-  githubUser: 'NuggAssassin',
-  repo: 'nuggassassin-docs',
+  githubUser: 'NuggLifeRP',
+  repo: 'nuggscripts-docs',
   branch: 'main',
 
   // Leave as null until the domain is bought and its DNS points here.
-  // Set it to 'docs.nuggassassin.com' and the site moves over with no other edits.
+  // Set it to 'docs.nuggscripts.com' and the site moves over with no other edits.
   domain: null,
 
   // Optional. Any left null simply hides its button.
-  discord: null,
+  discord: 'https://discord.gg/x4yKq6UATV',
   store: null,
   youtube: null,
 };

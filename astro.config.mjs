@@ -12,6 +12,13 @@ export default defineConfig({
   site: SITE_URL,
   base: BASE_PATH,
   trailingSlash: 'always',
+  markdown: {
+    shikiConfig: {
+      // The docs are full of server.cfg blocks. Shiki has no "cfg" grammar, and
+      // bash is the closest match for `ensure x` / `set y "z"` / # comments.
+      langAlias: { cfg: 'bash' },
+    },
+  },
   integrations: [
     starlight({
       title: SITE.title,

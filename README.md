@@ -31,7 +31,7 @@ and `src/content/docs/start/`.
 
 ```bash
 npm run sync     # pull the latest markdown from the script folders
-npm run dev      # preview at http://localhost:4321/nuggassassin-docs/
+npm run dev      # preview at http://localhost:4321/nuggscripts-docs/
 ```
 
 Then commit and push. GitHub Actions builds and deploys on every push to `main`.
@@ -71,7 +71,7 @@ one of them changes.
 
 ### Moving to a custom domain
 
-1. Set `domain: 'docs.example.com'` in `site.config.mjs`. The site URL and base
+1. Set `domain: 'docs.nuggscripts.com'` in `site.config.mjs`. The site URL and base
    path both follow automatically.
 2. Add `public/CNAME` containing that hostname on one line.
 3. Point a `CNAME` DNS record at `<user>.github.io`.
@@ -80,4 +80,4 @@ one of them changes.
 5. Run `npm run sync` and rebuild.
 
 Internal links are written relative to the page, so they survive the base path
-changing from `/nuggassassin-docs` to `/`.
+changing from `/nuggscripts-docs` to `/`.
