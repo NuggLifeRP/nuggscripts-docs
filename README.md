@@ -1,7 +1,36 @@
 # NuggScripts docs
 
-The customer-facing documentation site for the NuggScripts FiveM resources, built with
-[Astro Starlight](https://starlight.astro.build) and deployed to GitHub Pages.
+The NuggScripts website: an animated landing page and storefront at the root, and the
+customer-facing documentation for every FiveM resource under it. Built with Astro and
+[Astro Starlight](https://starlight.astro.build), deployed to GitHub Pages.
+
+| Path | What |
+| --- | --- |
+| `/` | Landing page — `src/pages/index.astro` |
+| `/store/`, `/store/<product>/` | Storefront — `src/pages/store/` |
+| `/docs/` | Documentation welcome — `src/content/docs/docs.mdx` |
+| everything else | Documentation pages (Starlight) |
+
+## The store
+
+Products, prices, covers and descriptions come from Tebex through the public Headless
+API; nothing about a product is typed into this repo except what Tebex does not hold.
+
+- `src/data/catalog.json` — a snapshot of the live catalogue. `npm run catalog`
+  refreshes it, and CI refreshes it on every deploy (keeping the committed copy if
+  Tebex is unreachable). Prices are also refreshed in the browser on page load.
+- `src/data/store.config.mjs` — the public token, plus per-package extras: URL slug,
+  one-line pitch, tags, docs link, featured/badge, bundle contents. A package added in
+  Tebex appears without an entry here, with defaults.
+- Checkout: the cart lives in the browser. On checkout a Tebex basket is created, the
+  buyer logs in with FiveM (Tebex requires it before packages can be added), comes back
+  to the page, and pays in the Tebex.js popup. Payment, tax and delivery stay with Tebex.
+- To change a description, edit the generator in the store working folder, push it to
+  Tebex, then `npm run catalog` (or just push — CI refreshes it).
+
+The animated logo in `public/media/` is a stacked-alpha video (colour on top, alpha
+below, 16 px gap) in AV1 with an HEVC fallback, recombined by a WebGL shader in
+`src/scripts/logo.ts`. Every effect honours the visitor's reduced-motion setting.
 
 ## Documentation only
 
@@ -76,7 +105,7 @@ dropped.
 1. Add an entry to `docs.sources.json`: the product slug, its folder path, and
    which sections of each markdown file become which page.
 2. Add its sidebar group in `astro.config.mjs`.
-3. Add its card to `src/content/docs/index.mdx`.
+3. Add its card to `src/content/docs/docs.mdx`.
 4. `npm run sync`, check the warnings are clean, commit.
 
 ## Commands
@@ -84,6 +113,7 @@ dropped.
 | | |
 | --- | --- |
 | `npm run sync` | Regenerate pages from the script folders |
+| `npm run catalog` | Refresh the store catalogue snapshot from Tebex |
 | `npm run dev` | Local preview with hot reload |
 | `npm run build` | Production build into `dist/` |
 | `npm run check:source` | Confirm the repo holds documentation only |
