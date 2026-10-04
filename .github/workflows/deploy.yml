@@ -33,6 +33,11 @@ jobs:
       - name: Documentation only — no product source, no credentials
         run: npm run check:source
 
+      # Prices and descriptions come from Tebex. If Tebex cannot be reached,
+      # the snapshot committed in src/data/catalog.json is used instead.
+      - name: Refresh the store catalogue from Tebex
+        run: npm run catalog || echo "Tebex unreachable - building from the committed catalogue snapshot"
+
       - run: npm run build
 
       # Fails the deploy rather than shipping a page with dead links.
