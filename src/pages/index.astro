@@ -1,0 +1,267 @@
+---
+import Shell from '../layouts/Shell.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getCollection } from 'astro:content';
+import { products, ofKind, kinds, bundleValue, money, byId } from '../lib/catalog';
+import { Image } from 'astro:assets';
+import mcVideo from '../assets/mc-video.jpg';
+
+const featured = byId.get(7667018);
+const bundles = ofKind('bundle');
+const best = Math.max(0, ...bundles.map((b) => bundleValue(b).pct));
+const docsPages = (await getCollection('docs')).filter((d) => !d.id.startsWith('404')).length;
+const marqueeA = ['ESX Legacy', 'QBCore', 'Qbox', 'Standalone MLOs', 'Escrow protected', 'Instant Cfx.re delivery', 'Docs before you buy', 'Discord support'];
+const marqueeB = products.map((p) => p.short);
+const yt = featured?.video?.match(/(?:youtu\.be\/|v=)([\w-]{11})/)?.[1];
+---
+
+<Shell
+  title="NuggScripts — FiveM scripts, MLOs & props"
+  description="FiveM scripts, MLO interiors and props for ESX, QBCore and Qbox — built on a live roleplay server, documented in full and delivered instantly to your Cfx.re account."
+  active="home"
+  intro
+>
+  <section class="hero">
+    <canvas id="embers" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div>
+        <p class="kicker reveal">FiveM scripts · MLOs · props</p>
+        <h1 class="display">
+          <span data-split>Built on a</span>
+          <span data-split style="--d:180ms">live server.</span>
+          <span class="shine" data-split style="--d:380ms">Sold to yours.</span>
+        </h1>
+        <p class="lede reveal" style="--d:500ms">
+          Scripts, interiors and props made for a running roleplay city first, then released — documented in full before you
+          buy, and delivered the moment you pay straight to your Cfx.re account.
+        </p>
+        <div class="ctas reveal" style="--d:640ms">
+          <a class="btn btn-primary" href="/store/" data-magnetic>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 8H6" /></svg>
+            Browse the store
+          </a>
+          <a class="btn btn-ghost" href="/docs/" data-magnetic>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5" /></svg>
+            Read the docs
+          </a>
+        </div>
+        <div class="trust reveal" style="--d:760ms">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 4 14h7l-1 8 9-12h-7z" /></svg>Instant Cfx.re delivery</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z" /></svg>Escrow protected</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v14H4zM8 9h8M8 13h5" /></svg>Docs before you buy</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-12 7l-5 1 1-4a8 8 0 1 1 16-4z" /></svg>Discord support</span>
+        </div>
+      </div>
+      <div class="stage" id="stage">
+        <div class="glow"></div>
+        <div class="rings"><span class="ring r3"></span><span class="ring r1"></span><span class="ring r2"></span></div>
+        <div class="floor"></div>
+        <div class="logo" id="logo" data-av1="/media/nuggscripts-logo-stacked-av1-{size}.mp4" data-hevc="/media/nuggscripts-logo-stacked-hevc-{size}.mp4">
+          <img src="/media/nuggscripts-logo-poster.webp" alt="NuggScripts — the Nugg mascot with two golden katanas" width="704" height="924" fetchpriority="high" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="track">{[...marqueeA, ...marqueeA].map((t, i) => <span class={i % 2 ? 'o' : ''}>{t}</span>)}</div>
+  </div>
+
+  {featured && (
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="kicker reveal">Featured release</p>
+            <h2 class="display" data-split>Pole position</h2>
+          </div>
+          <p class="reveal">The newest script on the grid, with a launch price that ends on a real date.</p>
+        </div>
+        <div class="spot reveal">
+          <div class="vid" data-yt={yt} role="button" tabindex="0" aria-label="Play the showcase video">
+            <Image src={mcVideo} alt="nuggs_multicharacter showcase" widths={[640, 960, 1280]} sizes="(max-width: 860px) 100vw, 60vw" />
+            <span class="play" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg></span>
+          </div>
+          <div class="info">
+            <div class="chips">
+              <span class="chip gold">{featured.badge ?? 'Featured'}</span>
+              {featured.tags.map((t) => <span class="chip">{t}</span>)}
+            </div>
+            <h3 class="display">{featured.short}</h3>
+            <p style="margin:0">{featured.pitch}</p>
+            {featured.promo && (
+              <div data-until={featured.promo.until}>
+                <p style="margin:0 0 8px;color:var(--gold);font-weight:700;font-size:14px">{featured.promo.text}</p>
+                <div class="count-down" aria-label="Time left at the launch price">
+                  <div><b data-cd="d">--</b><span>Days</span></div>
+                  <div><b data-cd="h">--</b><span>Hours</span></div>
+                  <div><b data-cd="m">--</b><span>Mins</span></div>
+                  <div><b data-cd="s">--</b><span>Secs</span></div>
+                </div>
+              </div>
+            )}
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:auto">
+              <span class="price" style="font-size:44px"><span data-price-id={featured.id}>{money(featured.price)}</span></span>
+              <button class="btn btn-primary" type="button" data-add={featured.id} data-label="Add to cart" data-magnetic><span class="lbl">Add to cart</span></button>
+              <a class="btn btn-ghost" href={featured.href}>Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {bundles.length > 0 && (
+    <section class="section" style="padding-top:0">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="kicker reveal">Bundles</p>
+            <h2 class="display" data-split>Full send, <span class="gtext">less spend</span></h2>
+          </div>
+          <p class="reveal">Whole collections in one checkout, priced below the parts — every asset delivered to your Cfx.re account at once.</p>
+        </div>
+        <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="ns-ring" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2fd27a" /><stop offset="1" stop-color="#f7e017" /></linearGradient></defs></svg>
+        <div class="bundles">
+          {bundles.map((b, i) => {
+            const v = bundleValue(b);
+            return (
+              <article class="bundle reveal" style={`--d:${i * 120}ms`} data-tilt="3">
+                <div>
+                  <span class="chip hot">{v.parts.length} products</span>
+                  <h3 class="display">{b.short}</h3>
+                  <p style="margin:0;color:var(--muted);max-width:44ch">{b.pitch}</p>
+                  <div class="parts">{v.parts.map((p, k) => <img src={p.image} alt={p.short} loading="lazy" style={`--i:${k}`} />)}</div>
+                </div>
+                <div class="ring-save" style={`--pct:${v.pct}`} aria-label={`Save ${v.pct} percent`}>
+                  <svg viewBox="0 0 110 110"><circle class="bg" cx="55" cy="55" r="46" /><circle class="fg" cx="55" cy="55" r="46" /></svg>
+                  <div><b>{v.pct}%</b><span>Saving</span></div>
+                </div>
+                <div class="row">
+                  <span class="price" style="font-size:40px"><span data-price-id={b.id}>{money(b.price)}</span><small>{money(v.total)}</small></span>
+                  <div style="display:flex;gap:10px">
+                    <a class="btn btn-ghost btn-sm" href={b.href}>What's inside</a>
+                    <button class="btn btn-gold btn-sm" type="button" data-add={b.id} data-label="Add bundle"><span class="lbl">Add bundle</span></button>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="kicker reveal">The garage</p>
+          <h2 class="display" data-split>Pick your lane</h2>
+        </div>
+        <p class="reveal">Scripts for your framework, interiors for any framework, and props that make the shelves look finished.</p>
+      </div>
+      <div class="bento">
+        {kinds.map((k, i) => {
+          const list = products.filter((p) => p.kind === k.key).slice(0, 4);
+          return (
+            <a class="tile reveal" href={`/store/#${k.key}`} style={`--d:${i * 90}ms`}>
+              <div class="bg">{list.map((p) => <img src={p.image} alt="" loading="lazy" />)}</div>
+              <span class="n">{String(k.count).padStart(2, '0')}</span>
+              <div class="in">
+                <h3 class="display">{k.plural}</h3>
+                <p>{k.blurb}</p>
+                <span class="go">Open {k.plural.toLowerCase()} →</span>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="kicker reveal">Full catalogue</p>
+          <h2 class="display" data-split>Everything on the grid</h2>
+        </div>
+        <div class="tabs reveal" role="group" aria-label="Filter products" data-filter-for="home-grid">
+          <button type="button" aria-pressed="true" data-k="all">All</button>
+          {kinds.map((k) => <button type="button" aria-pressed="false" data-k={k.key}>{k.plural}</button>)}
+        </div>
+      </div>
+      <div class="grid" id="home-grid">
+        {products.map((p, i) => <ProductCard p={p} delay={(i % 4) * 80} />)}
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee rev" aria-hidden="true">
+    <div class="track">{[...marqueeB, ...marqueeB].map((t, i) => <span class={i % 2 ? '' : 'o'}>{t}</span>)}</div>
+  </div>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="kicker reveal">How buying works</p>
+          <h2 class="display" data-split>Lights out to <span class="gtext">in-game</span></h2>
+        </div>
+        <p class="reveal">No download links to lose. Everything is a Cfx.re asset grant, so it is tied to your account and updates land in the same place.</p>
+      </div>
+      <div class="steps reveal">
+        <div class="track"><i></i></div>
+        <div class="step"><div class="num">1</div><h3>Check the page</h3><p>Framework, dependencies, escrow and what it does not do are on every product page — and the full docs are public.</p></div>
+        <div class="step"><div class="num">2</div><h3>Log in with FiveM</h3><p>Check out with the Cfx.re account that owns your server key. That is the account the asset is granted to.</p></div>
+        <div class="step"><div class="num">3</div><h3>Pay with Tebex</h3><p>Tebex handles payment and tax as merchant of record, in a secure checkout that opens right here.</p></div>
+        <div class="step"><div class="num">4</div><h3>Download & ensure</h3><p>Grab it from your Cfx.re granted assets, drop it into resources and follow the install page.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="stats reveal">
+        <div class="stat"><b class="gtext" data-count={products.length}>{products.length}</b><span>products on the grid</span></div>
+        <div class="stat"><b class="gtext" data-count="3">3</b><span>frameworks — ESX Legacy, QBCore, Qbox</span></div>
+        <div class="stat"><b class="gtext" data-count={docsPages}>{docsPages}</b><span>pages of public documentation</span></div>
+        <div class="stat"><b class="gtext" data-count={best} data-suf="%">{best}%</b><span>best bundle saving</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="band reveal">
+        <div>
+          <p class="kicker">Before you buy</p>
+          <h2 class="display">Read the manual<br /><span class="gtext">first.</span></h2>
+          <p style="color:var(--muted);max-width:52ch;margin:14px 0 0">Install steps, every config option, exports and troubleshooting are public. If the install looks like something your setup cannot do, better to know now — and pre-sales questions in Discord are always welcome.</p>
+        </div>
+        <div class="ctas">
+          <a class="btn btn-primary" href="/docs/" data-magnetic>Open the docs</a>
+          <a class="btn btn-ghost" href="https://discord.gg/x4yKq6UATV" target="_blank" rel="noopener noreferrer" data-magnetic>Join the Discord</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Shell>
+
+<script>
+  import { embers } from '../scripts/fx';
+  import { stackedLogo, parallax } from '../scripts/logo';
+  import { initFilters, initCountdowns, initVideoFacades } from '../scripts/page';
+  const e = document.getElementById('embers') as HTMLCanvasElement | null;
+  if (e) embers(e);
+  const logo = document.getElementById('logo');
+  const startLogo = () => { if (logo) stackedLogo(logo); };
+  if (document.readyState === 'complete') setTimeout(startLogo, 200);
+  else addEventListener('load', () => setTimeout(startLogo, 200), { once: true });
+  const stage = document.getElementById('stage');
+  if (stage) parallax(stage);
+  initFilters();
+  initCountdowns();
+  initVideoFacades();
+</script>

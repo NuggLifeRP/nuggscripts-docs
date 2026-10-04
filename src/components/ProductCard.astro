@@ -1,0 +1,31 @@
+---
+import { type Product, money, bundleValue } from '../lib/catalog';
+import { KINDS } from '../data/store.config.mjs';
+interface Props { p: Product; delay?: number; eager?: boolean }
+const { p, delay = 0, eager = false } = Astro.props;
+const value = p.kind === 'bundle' ? bundleValue(p) : null;
+---
+
+<article class="card reveal" data-tilt="6" data-kind={p.kind} data-name={`${p.name} ${p.tags.join(' ')} ${p.pitch} ${p.searchText}`.toLowerCase()} data-price={p.price} data-order={p.order} data-updated={p.updated} style={`--d:${delay}ms`}>
+  <div class="media">
+    <img src={p.image} alt={p.short} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+    <div class="badges">
+      <span class="chip">{(KINDS as any)[p.kind].label}</span>
+      {p.badge && <span class="chip gold">{p.badge}</span>}
+      {value && value.save > 0 && <span class="chip hot">Save {value.pct}%</span>}
+    </div>
+  </div>
+  <div class="body">
+    <h3>{p.short}</h3>
+    <p>{p.pitch}</p>
+    {p.tags.length > 0 && <div class="chips">{p.tags.slice(0, 3).map((t) => <span class="chip">{t}</span>)}</div>}
+    <div class="foot">
+      <span class="price"><span data-price-id={p.id}>{money(p.price)}</span>{value && value.save > 0 && <small>{money(value.total)}</small>}</span>
+      <button class="btn btn-primary btn-sm addbtn" type="button" data-add={p.id} data-label="Add" aria-label={`Add ${p.short} to cart`}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14" /></svg>
+        <span class="lbl">Add</span>
+      </button>
+    </div>
+  </div>
+  <a class="stretch" href={p.href} aria-label={`${p.short} — details`}></a>
+</article>

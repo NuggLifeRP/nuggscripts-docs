@@ -1,0 +1,66 @@
+---
+import Shell from '../../layouts/Shell.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { products, kinds, ofKind, bundleValue, money } from '../../lib/catalog';
+const bundles = ofKind('bundle');
+---
+
+<Shell
+  title="Store — NuggScripts"
+  description="Every NuggScripts FiveM script, MLO interior, prop pack and bundle — live prices, instant Cfx.re delivery, secure Tebex checkout."
+  active="store"
+>
+  <section class="store-head">
+    <div class="wrap">
+      <p class="kicker reveal">The store</p>
+      <h1 class="display" data-split>The <span class="shine">grid</span></h1>
+      <p class="lede reveal" style="--d:300ms">
+        {products.length} products, live prices from Tebex, and checkout without leaving the page. Log in with the Cfx.re account
+        that owns your server key — that is where everything is delivered.
+      </p>
+      {bundles.length > 0 && (
+        <div class="chips reveal" style="--d:420ms;margin-top:18px">
+          {bundles.map((b) => {
+            const v = bundleValue(b);
+            return <a class="chip gold" href={b.href}>{b.short}: save {money(v.save)} ({v.pct}%)</a>;
+          })}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section style="padding-bottom:40px">
+    <div class="wrap">
+      {kinds.map((k) => <span id={k.key} class="kind-anchor"></span>)}
+      <div class="controls">
+        <div class="tabs" role="group" aria-label="Filter by type" data-filter-for="store-grid" data-hash>
+          <button type="button" aria-pressed="true" data-k="all">All <span style="opacity:.6">{products.length}</span></button>
+          {kinds.map((k) => <button type="button" aria-pressed="false" data-k={k.key}>{k.plural} <span style="opacity:.6">{k.count}</span></button>)}
+        </div>
+        <label class="field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+          <span class="sr-only">Search the store</span>
+          <input type="search" placeholder="Search — try “QBCore”, “rooms” or “soda”" data-search-for="store-grid" />
+        </label>
+        <label class="field sort">
+          <span class="sr-only">Sort</span>
+          <select data-sort-for="store-grid">
+            <option value="featured">Featured first</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="new">Recently updated</option>
+          </select>
+        </label>
+      </div>
+      <div class="grid" id="store-grid">
+        {products.map((p, i) => <ProductCard p={p} delay={(i % 4) * 70} eager={i < 4} />)}
+      </div>
+      <p class="noresult" data-empty-for="store-grid" hidden>Nothing matches that search. Try a framework, a room count or a product name.</p>
+    </div>
+  </section>
+</Shell>
+
+<script>
+  import { initFilters } from '../../scripts/page';
+  initFilters();
+</script>

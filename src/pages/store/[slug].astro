@@ -1,0 +1,123 @@
+---
+import Shell from '../../layouts/Shell.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { products, byId, money, bundleValue, bundlesContaining, related, galleryOf, type Product } from '../../lib/catalog';
+import { KINDS } from '../../data/store.config.mjs';
+
+export function getStaticPaths() {
+  return products.map((p) => ({ params: { slug: p.slug }, props: { p } }));
+}
+const { p } = Astro.props as { p: Product };
+const shots = galleryOf(p);
+const value = p.kind === 'bundle' ? bundleValue(p) : null;
+const inBundles = bundlesContaining(p.id).map((b) => ({ b, v: bundleValue(b) }));
+const more = related(p, 4);
+const updated = new Date(p.updated).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+/* The Tebex description is our own copy, generated in the store folder and
+   published through Tebex. Its screenshots open in the site lightbox. */
+const description = p.description
+  .replace(/(?:https:\/\/nuggscripts\.tebex\.io)?\/package\/(\d+)/g, (m, id) => byId.get(Number(id))?.href ?? `https://nuggscripts.tebex.io/package/${id}`)
+  .replace(/https:\/\/nuggscripts\.com\//g, '/')
+  .replace(/<img /g, '<img loading="lazy" decoding="async" ')
+  .replace(/target="_blank"/g, 'target="_blank" rel="noopener"');
+---
+
+<Shell title={`${p.short} — NuggScripts`} description={p.pitch} image={p.image} active="store">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a><span>/</span><a href="/store/">Store</a><span>/</span><a href={`/store/#${p.kind}`}>{(KINDS as any)[p.kind].plural}</a><span>/</span><span style="color:var(--text)">{p.short}</span>
+    </nav>
+
+    <div class="pdp">
+      <div class="gallery reveal" data-gallery data-shots={JSON.stringify(shots)}>
+        <div class="main" data-shot={shots[0]} role="button" tabindex="0" aria-label="Open screenshots">
+          <img src={shots[0]} alt={p.short} fetchpriority="high" />
+          <span class="zoom">{shots.length} {shots.length === 1 ? 'image' : 'images'} · click to enlarge</span>
+        </div>
+        {shots.length > 1 && (
+          <div class="thumbs">
+            {shots.map((s, i) => (
+              <button type="button" data-full={s} aria-current={i === 0 ? 'true' : 'false'} aria-label={`Screenshot ${i + 1}`}>
+                <img src={s} alt="" loading="lazy" />
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <aside class="buy reveal" style="--d:120ms">
+        <div class="chips">
+          <span class="chip">{(KINDS as any)[p.kind].label}</span>
+          {p.badge && <span class="chip gold">{p.badge}</span>}
+          {value && value.save > 0 && <span class="chip hot">Save {value.pct}%</span>}
+        </div>
+        <h1 class="display">{p.short}</h1>
+        <p class="pitch">{p.pitch}</p>
+        {p.tags.length > 0 && <div class="chips">{p.tags.map((t) => <span class="chip">{t}</span>)}</div>}
+        {p.promo && (
+          <div class="promo-bar" data-until={p.promo.until}>
+            {p.promo.text}
+            <div class="count-down" style="margin-top:10px">
+              <div><b data-cd="d">--</b><span>Days</span></div>
+              <div><b data-cd="h">--</b><span>Hours</span></div>
+              <div><b data-cd="m">--</b><span>Mins</span></div>
+              <div><b data-cd="s">--</b><span>Secs</span></div>
+            </div>
+          </div>
+        )}
+        <div class="pricebox">
+          <span class="price"><span data-price-id={p.id}>{money(p.price)}</span>{value && value.save > 0 && <small>{money(value.total)}</small>}</span>
+          {value && value.save > 0 && <span style="color:var(--rg-300);font-weight:700">You save {money(value.save)}</span>}
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" type="button" data-add={p.id} data-label="Add to cart" data-magnetic><span class="lbl">Add to cart</span></button>
+          <button class="btn btn-gold" type="button" data-buy={p.id} data-magnetic>Buy now</button>
+        </div>
+        {inBundles.map(({ b, v }) => (
+          <a class="upsell" href={b.href}>Also in the <b>{b.short}</b> — {v.parts.length} products for {money(b.price)}, <b>save {money(v.save)}</b> →</a>
+        ))}
+        <div class="meta">
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 4 14h7l-1 8 9-12h-7z" /></svg><span>Delivered instantly as a Cfx.re asset grant to the account you log in with at checkout.</span></div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z" /></svg><span>Secure Tebex checkout. Tax is calculated at payment.</span></div>
+          {p.docs && <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5" /></svg><span>Full documentation is public — <a href={p.docs}>read it before you buy</a>.</span></div>}
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg><span>Last updated {updated}.</span></div>
+        </div>
+      </aside>
+    </div>
+
+    {value && value.parts.length > 0 && (
+      <section class="desc reveal">
+        <p class="kicker">What is inside</p>
+        <div class="parts-list">
+          {value.parts.map((x) => (
+            <a href={x.href}><img src={x.image} alt="" loading="lazy" /><span><b>{x.short}</b><span style="color:var(--muted);font-size:13.5px">{x.pitch}</span></span><span class="price" style="font-size:22px">{money(x.price)}</span></a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="desc">
+      <div class="tebex" set:html={description} />
+    </section>
+
+    {more.length > 0 && (
+      <section class="section" style="padding-top:20px">
+        <div class="section-head">
+          <div>
+            <p class="kicker reveal">Keep browsing</p>
+            <h2 class="display" data-split>Also on the grid</h2>
+          </div>
+          <a class="btn btn-ghost" href="/store/">All products</a>
+        </div>
+        <div class="grid">{more.map((x, i) => <ProductCard p={x} delay={i * 80} />)}</div>
+      </section>
+    )}
+  </div>
+</Shell>
+
+<script>
+  import { initGallery, initCountdowns } from '../../scripts/page';
+  initGallery();
+  initCountdowns();
+</script>

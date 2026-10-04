@@ -1,41 +1,37 @@
 ---
-// Adds a store link beside the GitHub and Discord icons in the header.
-// Starlight's `social` config only accepts its own built-in icon names and
-// there is no cart or store icon among them, so this override renders the
-// default icons and appends one of our own.
+// Adds the store to the header beside the GitHub and Discord icons.
+// Starlight's `social` config only accepts its own built-in icon names, so this
+// override renders the default icons and appends a store pill of our own.
 import Default from '@astrojs/starlight/components/SocialIcons.astro';
-import { SITE } from '../../site.config.mjs';
 ---
 
 <Default><slot /></Default>
 
-{
-  SITE.store && (
-    <a href={SITE.store} target="_blank" rel="noopener noreferrer" class="sl-flex store-link">
-      <span class="sr-only">Store</span>
-      <svg
-        aria-hidden="true"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        style="--sl-icon-size: 1em;"
-      >
-        <path d="M7.5 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm9 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM2 3a1 1 0 0 0 0 2h1.6l2.9 9.4A2 2 0 0 0 8.4 16h9.2a2 2 0 0 0 1.9-1.4l2.3-7A1 1 0 0 0 20.9 6H6.2l-.7-2.3A1 1 0 0 0 4.6 3H2Z" />
-      </svg>
-    </a>
-  )
-}
+<a href="/store/" class="sl-flex store-link">
+  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M7.5 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm9 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM2 3a1 1 0 0 0 0 2h1.6l2.9 9.4A2 2 0 0 0 8.4 16h9.2a2 2 0 0 0 1.9-1.4l2.3-7A1 1 0 0 0 20.9 6H6.2l-.7-2.3A1 1 0 0 0 4.6 3H2Z" />
+  </svg>
+  <span>Store</span>
+</a>
 
 <style>
-  /* Matches the padding, colour and hover of Starlight's own social icons. */
   .store-link {
-    color: var(--sl-color-text-accent);
-    padding: 0.5em;
-    margin: -0.5em;
+    align-items: center;
+    gap: 0.45em;
+    padding: 0.4em 0.85em;
+    margin-inline-start: 0.4em;
+    border-radius: 999px;
+    border: 1px solid var(--sl-color-accent);
+    color: var(--sl-color-white);
+    font-size: var(--sl-text-sm);
+    font-weight: 600;
+    text-decoration: none;
+    background: linear-gradient(135deg, rgba(19, 160, 88, 0.25), rgba(0, 66, 37, 0.25));
+    transition: box-shadow 0.25s, border-color 0.25s;
   }
 
   .store-link:hover {
-    color: var(--sl-color-white);
+    border-color: var(--nugg-gold);
+    box-shadow: 0 0 0 3px rgba(47, 210, 122, 0.18), 0 0 18px rgba(47, 210, 122, 0.35);
   }
 </style>

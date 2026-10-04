@@ -1,0 +1,15 @@
+---
+// Starlight's own hero, plus the animated logo player for the stage that
+// docs.mdx passes in as the hero image.
+import Default from '@astrojs/starlight/components/Hero.astro';
+---
+
+<Default />
+
+<script>
+  import { stackedLogo } from '../scripts/logo';
+  const logo = document.getElementById('docs-logo');
+  const start = () => { if (logo) stackedLogo(logo); };
+  if (document.readyState === 'complete') setTimeout(start, 200);
+  else addEventListener('load', () => setTimeout(start, 200), { once: true });
+</script>

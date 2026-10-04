@@ -1,99 +1,158 @@
-/* NuggScripts docs theme — dark first, keyed to the logo. */
+/* NuggScripts docs theme — race green, dark first, matching the store. */
 
 :root {
-  --nugg-magenta: #ff2d95;
-  --nugg-magenta-deep: #b3005e;
-  --nugg-yellow: #f7e017;
-  --nugg-green: #7bc043;
-  --nugg-purple: #a249c8;
-  /* The logo purple is too dark to separate from the magenta when both sit on
-     the near-black hero. This lifted version is used only in that gradient. */
-  --nugg-purple-bright: #c47bf0;
+  --nugg-brg: #004225;
+  --nugg-green: #13a058;
+  --nugg-neon: #2fd27a;
+  --nugg-mint: #86ecb1;
+  --nugg-gold: #f7e017;
 
-  --sl-font: 'Inter var', 'Inter', ui-sans-serif, system-ui, -apple-system,
-    'Segoe UI', Roboto, sans-serif;
+  --sl-font: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --nugg-display: 'Saira Variable', 'Saira', 'Bahnschrift', 'Arial Narrow', sans-serif;
   --sl-nav-height: 4rem;
   --sl-content-width: 50rem;
 }
 
 :root,
 :root[data-theme='dark'] {
-  --sl-color-accent-low: #3d0325;
-  --sl-color-accent: #d4126f;
-  --sl-color-accent-high: #ff8ec4;
-  --sl-color-text-accent: #ff69b4;
+  --sl-color-accent-low: #06331d;
+  --sl-color-accent: #13a058;
+  --sl-color-accent-high: #a6f3c6;
+  --sl-color-text-accent: #5fe39a;
 
   --sl-color-white: #ffffff;
-  --sl-color-gray-1: #f2ecf5;
-  --sl-color-gray-2: #cfc4d6;
-  --sl-color-gray-3: #a294ab;
-  --sl-color-gray-4: #6d5f77;
-  --sl-color-gray-5: #3d3346;
-  --sl-color-gray-6: #241c2d;
-  --sl-color-black: #0b0710;
+  --sl-color-gray-1: #eaf5ee;
+  --sl-color-gray-2: #c4d8cb;
+  --sl-color-gray-3: #8fab9b;
+  --sl-color-gray-4: #5d7a69;
+  --sl-color-gray-5: #24402f;
+  --sl-color-gray-6: #0f2519;
+  --sl-color-black: #020906;
 
-  --sl-color-bg: #0b0710;
-  --sl-color-bg-nav: rgba(13, 8, 20, 0.85);
-  --sl-color-bg-sidebar: #0e0916;
-  --sl-color-bg-inline-code: #241c2d;
-  --sl-color-hairline-light: #2b2135;
-  --sl-color-hairline-shade: #1a1322;
+  --sl-color-bg: #020906;
+  --sl-color-bg-nav: rgba(2, 12, 7, 0.82);
+  --sl-color-bg-sidebar: #04110a;
+  --sl-color-bg-inline-code: #0d2a1c;
+  --sl-color-hairline-light: #143a27;
+  --sl-color-hairline-shade: #0a1d13;
 }
 
 :root[data-theme='light'] {
-  --sl-color-accent-low: #ffd6ea;
-  --sl-color-accent: #c2006a;
-  --sl-color-accent-high: #7a0042;
-  --sl-color-text-accent: #b3005e;
+  --sl-color-accent-low: #d3f5e1;
+  --sl-color-accent: #007a3d;
+  --sl-color-accent-high: #00401f;
+  --sl-color-text-accent: #006633;
 
-  --sl-color-white: #14101a;
-  --sl-color-gray-1: #241c2d;
-  --sl-color-gray-2: #423a4c;
-  --sl-color-gray-3: #6d5f77;
-  --sl-color-gray-4: #9c90a5;
-  --sl-color-gray-5: #ddd5e3;
-  --sl-color-gray-6: #f3eef7;
-  --sl-color-gray-7: #faf8fc;
+  --sl-color-white: #0b1a12;
+  --sl-color-gray-1: #10261a;
+  --sl-color-gray-2: #2f4a3b;
+  --sl-color-gray-3: #557063;
+  --sl-color-gray-4: #8ba596;
+  --sl-color-gray-5: #cfe0d6;
+  --sl-color-gray-6: #edf6f0;
+  --sl-color-gray-7: #f7fbf8;
   --sl-color-black: #ffffff;
 
   --sl-color-bg: #ffffff;
   --sl-color-bg-nav: rgba(255, 255, 255, 0.9);
-  --sl-color-bg-sidebar: #faf8fc;
+  --sl-color-bg-sidebar: #f7fbf8;
   /* Without this, light mode inherits the dark inline-code background and the
      code becomes unreadable. */
-  --sl-color-bg-inline-code: #f3eef7;
-  --sl-color-hairline-light: #e6dfeb;
+  --sl-color-bg-inline-code: #e8f4ec;
+  --sl-color-hairline-light: #d5e6dc;
+}
+
+/* Backdrop ------------------------------------------------------------------ */
+
+:root[data-theme='dark'] body {
+  background:
+    radial-gradient(60rem 40rem at 85% -10%, rgba(19, 160, 88, 0.16), transparent 60%),
+    radial-gradient(50rem 30rem at -10% 20%, rgba(0, 66, 37, 0.35), transparent 60%),
+    var(--sl-color-bg);
+  background-attachment: fixed;
+}
+
+:root[data-theme='dark'] body::before {
+  content: '';
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 30% at 30% 30%, rgba(47, 210, 122, 0.07), transparent 70%),
+    radial-gradient(35% 25% at 70% 60%, rgba(247, 224, 23, 0.035), transparent 70%);
+  animation: nugg-drift 26s ease-in-out infinite alternate;
+}
+
+@keyframes nugg-drift {
+  to { transform: translate3d(4%, -3%, 0) rotate(8deg); }
 }
 
 /* Navigation ------------------------------------------------------------- */
 
 header.header {
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px) saturate(140%);
   border-bottom: 1px solid var(--sl-color-hairline-light);
+}
+
+header.header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--nugg-neon) 20%, var(--nugg-gold) 50%, var(--nugg-neon) 80%, transparent);
+  opacity: 0.55;
 }
 
 .site-title img {
   height: 2.1rem;
   width: auto;
+  filter: drop-shadow(0 0 8px rgba(47, 210, 122, 0.45));
+  transition: transform 0.4s cubic-bezier(.2, .8, .2, 1);
+}
+
+.site-title:hover img {
+  transform: rotate(-8deg) scale(1.08);
 }
 
 .site-title {
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-family: var(--nugg-display);
+  font-stretch: 75%;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
-/* Accent the active sidebar entry with the brand magenta. */
+/* Accent the active sidebar entry with a racing-green bar. */
 .sidebar-content a[aria-current='page'] {
-  background-color: var(--sl-color-accent-low);
+  background: linear-gradient(90deg, rgba(19, 160, 88, 0.28), transparent);
+  box-shadow: inset 3px 0 0 var(--nugg-gold);
   color: var(--sl-color-white);
   font-weight: 600;
 }
 
 /* Content ---------------------------------------------------------------- */
 
+.sl-markdown-content h1,
+.sl-markdown-content h2,
+.sl-markdown-content h3,
+h1#_top {
+  font-family: var(--nugg-display);
+  font-stretch: 78%;
+  letter-spacing: 0.005em;
+}
+
+h1#_top {
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
 .sl-markdown-content h2 {
   padding-bottom: 0.3em;
   border-bottom: 1px solid var(--sl-color-hairline-light);
+  font-weight: 800;
 }
 
 .sl-markdown-content table {
@@ -116,41 +175,47 @@ header.header {
 }
 
 .sl-markdown-content blockquote {
-  border-inline-start-color: var(--nugg-magenta);
+  border-inline-start-color: var(--nugg-gold);
 }
 
 /* Landing page ----------------------------------------------------------- */
 
-.hero img {
-  filter: drop-shadow(0 0 3rem rgba(255, 45, 149, 0.35));
+.hero > img {
+  filter: drop-shadow(0 0 3rem rgba(47, 210, 122, 0.35));
   max-height: 30rem;
   width: auto;
+  animation: nugg-float 7s ease-in-out infinite;
+}
+
+@keyframes nugg-float {
+  50% { transform: translateY(-12px); }
 }
 
 .hero h1 {
-  /* Each stop is given room on the word, so the title reads yellow, then
-     magenta, then purple, rather than fading straight from one to the next. */
-  background: linear-gradient(
-    100deg,
-    var(--nugg-yellow) 8%,
-    var(--nugg-magenta) 48%,
-    var(--nugg-purple-bright) 96%
-  );
+  font-family: var(--nugg-display);
+  font-stretch: 62%;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.92;
+  background: linear-gradient(100deg, #ffffff 15%, var(--nugg-mint) 40%, var(--nugg-gold) 52%, var(--nugg-mint) 64%, #ffffff 85%);
+  background-size: 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  animation: nugg-shine 7s linear infinite;
+}
+
+@keyframes nugg-shine {
+  from { background-position: 100% 0; }
+  to { background-position: -150% 0; }
 }
 
 :root[data-theme='light'] .hero h1 {
-  background: linear-gradient(
-    100deg,
-    #a87c00 8%,
-    var(--nugg-magenta-deep) 48%,
-    #7b2ea8 96%
-  );
+  background: linear-gradient(100deg, #004225 10%, #0a7a45 50%, #8a7a00 90%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  animation: none;
 }
 
 /* Product cards ---------------------------------------------------------- */
@@ -163,21 +228,22 @@ header.header {
 }
 
 .product-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--sl-color-hairline-light);
-  border-radius: 0.75rem;
-  background-color: var(--sl-color-bg-sidebar);
+  border-radius: 0.9rem;
+  background: linear-gradient(180deg, rgba(13, 40, 28, 0.6), var(--sl-color-bg-sidebar));
   text-decoration: none;
   color: inherit;
-  transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  transition: border-color 0.25s ease, transform 0.35s cubic-bezier(.2, .8, .2, 1), box-shadow 0.35s ease;
 }
 
 .product-card:hover {
-  border-color: var(--nugg-magenta);
-  transform: translateY(-3px);
-  box-shadow: 0 0.8rem 2rem rgba(255, 45, 149, 0.16);
+  border-color: var(--nugg-neon);
+  transform: translateY(-4px);
+  box-shadow: 0 1rem 2.5rem rgba(19, 160, 88, 0.22), 0 0 0 1px rgba(247, 224, 23, 0.15);
 }
 
 .product-card img {
@@ -185,6 +251,11 @@ header.header {
   aspect-ratio: 16 / 9;
   object-fit: cover;
   border-bottom: 1px solid var(--sl-color-hairline-light);
+  transition: transform 0.9s cubic-bezier(.16, 1, .3, 1);
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
 }
 
 .product-card .product-body {
@@ -193,7 +264,9 @@ header.header {
 
 .product-card h3 {
   margin: 0 0 0.4rem;
-  font-size: var(--sl-text-lg);
+  font-family: var(--nugg-display);
+  font-stretch: 75%;
+  font-size: var(--sl-text-xl);
   color: var(--sl-color-white);
 }
 
@@ -234,4 +307,112 @@ header.header {
 .generated-note {
   font-size: var(--sl-text-sm);
   color: var(--sl-color-gray-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme='dark'] body::before,
+  .hero > img,
+  .hero h1 {
+    animation: none;
+  }
+}
+
+/* Animated logo on the docs landing page --------------------------------- */
+
+.hero > .hero-html {
+  width: min(80%, 22rem);
+}
+
+.docs-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 704 / 924;
+}
+
+.docs-stage .ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(47, 210, 122, 0.28);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+}
+
+.docs-stage .ring.r1 {
+  width: 104%;
+  animation: nugg-spin 28s linear infinite;
+}
+
+.docs-stage .ring.r2 {
+  width: 82%;
+  border-style: dashed;
+  border-color: rgba(247, 224, 23, 0.25);
+  animation: nugg-spin 40s linear infinite reverse;
+}
+
+.docs-stage .ring::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--nugg-gold);
+  box-shadow: 0 0 16px var(--nugg-gold);
+}
+
+.docs-stage .ring.r2::before {
+  background: var(--nugg-neon);
+  box-shadow: 0 0 16px var(--nugg-neon);
+}
+
+.docs-stage .glow {
+  position: absolute;
+  inset: 15% 5%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(19, 160, 88, 0.5), rgba(0, 66, 37, 0.3) 45%, transparent 70%);
+  filter: blur(28px);
+}
+
+.docs-stage .logo {
+  position: absolute;
+  inset: 0;
+  animation: nugg-float 7s ease-in-out infinite;
+}
+
+.docs-stage .logo img,
+.docs-stage .logo canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.5));
+}
+
+.docs-stage .logo canvas {
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.docs-stage .logo.is-live canvas {
+  opacity: 1;
+}
+
+.docs-stage .logo.is-live img {
+  opacity: 0;
+  transition: opacity 0.6s 0.2s;
+}
+
+@keyframes nugg-spin {
+  to { rotate: 1turn; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .docs-stage .ring,
+  .docs-stage .logo {
+    animation: none;
+  }
 }

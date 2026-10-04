@@ -1,21 +1,22 @@
 ---
-title: NuggScripts
+title: Documentation
 description: Official documentation for the NuggScripts FiveM resources — install guides, full config references, exports and troubleshooting.
 template: splash
 editUrl: false
 lastUpdated: false
 hero:
-  tagline: Documentation for every NuggScripts resource — install steps, every config option, exports, and the fixes for what usually goes wrong.
+  title: The manual
+  tagline: Install steps, every config option, exports, and the fixes for what usually goes wrong — public, before you buy and after.
   image:
-    file: ../../assets/logo-hero.png
+    html: '<div class="docs-stage" aria-hidden="true"><span class="ring r1"></span><span class="ring r2"></span><div class="glow"></div><div class="logo" id="docs-logo" data-av1="/media/nuggscripts-logo-stacked-av1-{size}.mp4" data-hevc="/media/nuggscripts-logo-stacked-hevc-{size}.mp4"><img src="/media/nuggscripts-logo-poster.webp" alt="" width="704" height="924" /></div></div>'
   actions:
     - text: Start here
-      link: start/before-you-install/
+      link: /start/before-you-install/
       icon: right-arrow
       variant: primary
-    - text: nuggs_multicharacter
-      link: nuggs-multicharacter/
-      icon: open-book
+    - text: Browse the store
+      link: /store/
+      icon: star
       variant: minimal
 ---
 
@@ -26,7 +27,7 @@ import multicharacter from '../../assets/multicharacter.jpg';
 ## Scripts
 
 <div class="product-grid">
-  <a class="product-card" href="nuggs-multicharacter/">
+  <a class="product-card" href="/nuggs-multicharacter/">
     <img src={multicharacter.src} alt="nuggs_multicharacter character selection screen" loading="lazy" />
     <div class="product-body">
       <h3>nuggs_multicharacter</h3>
@@ -65,40 +66,30 @@ import multicharacter from '../../assets/multicharacter.jpg';
 <CardGrid>
   <Card title="Before you install" icon="approve-check">
     The artifact version, OneSync mode and database every script assumes.
-    [Check your server first](start/before-you-install/).
+    [Check your server first](/start/before-you-install/).
   </Card>
   <Card title="Downloading your purchase" icon="cloud-download">
     Where your files live after buying, and the unzip mistake that breaks
-    installs. [Get your files](start/downloading/).
+    installs. [Get your files](/start/downloading/).
   </Card>
   <Card title="Common install mistakes" icon="warning">
     The handful of problems behind most support tickets, with the fix for each.
-    [Read the list](start/common-mistakes/).
+    [Read the list](/start/common-mistakes/).
   </Card>
   <Card title="Getting support" icon="comment">
-    What to send so the first reply solves it. [How to ask](start/support/).
+    What to send so the first reply solves it. [How to ask](/start/support/).
   </Card>
 </CardGrid>
 
-{(SITE.store || SITE.discord || SITE.youtube) && (
-  <>
-    <h2>Elsewhere</h2>
-    <CardGrid>
-      {SITE.store && (
-        <Card title="Store" icon="star">
-          <p>Browse and buy the scripts. <a href={SITE.store} target="_blank" rel="noopener noreferrer">Open the store</a>.</p>
-        </Card>
-      )}
-      {SITE.discord && (
-        <Card title="Discord" icon="discord">
-          <p>Support tickets, release notes and previews. <a href={SITE.discord} target="_blank" rel="noopener noreferrer">Join the server</a>.</p>
-        </Card>
-      )}
-      {SITE.youtube && (
-        <Card title="YouTube" icon="youtube">
-          <p>Showcases and setup walkthroughs. <a href={SITE.youtube} target="_blank" rel="noopener noreferrer">Watch</a>.</p>
-        </Card>
-      )}
-    </CardGrid>
-  </>
-)}
+## Elsewhere
+
+<CardGrid>
+  <Card title="Store" icon="star">
+    Scripts, MLOs, props and bundles with live prices and checkout right on the page. [Open the store](/store/).
+  </Card>
+  {SITE.discord && (
+    <Card title="Discord" icon="discord">
+      <p>Support tickets, release notes and previews. <a href={SITE.discord} target="_blank" rel="noopener noreferrer">Join the server</a>.</p>
+    </Card>
+  )}
+</CardGrid>

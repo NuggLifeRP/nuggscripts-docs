@@ -20,7 +20,7 @@ export const SITE = {
 
   // Optional. Any left null simply hides its button.
   discord: 'https://discord.gg/x4yKq6UATV',
-  store: 'https://nugglife.tebex.io/category/scripts',
+  store: 'https://nuggscripts.tebex.io',
   youtube: null,
 };
 

@@ -1,0 +1,51 @@
+---
+import Shell from '../../layouts/Shell.astro';
+---
+
+<Shell title="Thank you — NuggScripts" description="Your NuggScripts purchase is on its way to your Cfx.re account." active="store">
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <section class="thanks">
+    <div class="wrap">
+      <p class="kicker reveal">Chequered flag</p>
+      <h1 class="display" data-split>You're <span class="gtext">in.</span></h1>
+      <p class="lede reveal" style="margin:18px auto 0">Thanks for buying. Your assets are granted to the Cfx.re account you logged in with — usually within a few moments of payment clearing.</p>
+      <ol class="reveal">
+        <li>Open your <a href="https://portal.cfx.re/assets/granted-assets" target="_blank" rel="noopener noreferrer">Cfx.re granted assets</a> and download what you bought.</li>
+        <li>Unzip it so the resource folder sits directly inside <code>resources</code>, then <code>ensure</code> it in <code>server.cfg</code>.</li>
+        <li>Follow the install page for the product in the <a href="/docs/">documentation</a>.</li>
+        <li>Stuck? Open a ticket in <a href="https://discord.gg/x4yKq6UATV" target="_blank" rel="noopener noreferrer">Discord</a> with your Tebex transaction ID.</li>
+      </ol>
+      <div class="reveal" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a class="btn btn-primary" href="https://portal.cfx.re/assets/granted-assets" target="_blank" rel="noopener noreferrer">Go to granted assets</a>
+        <a class="btn btn-ghost" href="/start/downloading/">Downloading your purchase</a>
+      </div>
+    </div>
+  </section>
+</Shell>
+
+<script>
+  import { reduced } from '../../scripts/fx';
+  const c = document.getElementById('confetti') as HTMLCanvasElement | null;
+  const ctx = c?.getContext('2d');
+  if (c && ctx && !reduced()) {
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    c.width = innerWidth * dpr; c.height = innerHeight * dpr;
+    const cols = ['#2fd27a', '#f7e017', '#13a058', '#ffffff', '#004225'];
+    const bits = Array.from({ length: 180 }, () => ({
+      x: c.width / 2 + (Math.random() - 0.5) * c.width * 0.3, y: c.height * 0.35,
+      vx: (Math.random() - 0.5) * 18 * dpr, vy: (-8 - Math.random() * 14) * dpr,
+      r: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.3, w: (6 + Math.random() * 8) * dpr, h: (4 + Math.random() * 6) * dpr,
+      c: cols[(Math.random() * cols.length) | 0],
+    }));
+    let frames = 0;
+    const tick = () => {
+      ctx.clearRect(0, 0, c.width, c.height);
+      for (const b of bits) {
+        b.vy += 0.35 * dpr; b.vx *= 0.99; b.x += b.vx; b.y += b.vy; b.r += b.vr;
+        ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.r); ctx.fillStyle = b.c; ctx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h); ctx.restore();
+      }
+      if (++frames < 260) requestAnimationFrame(tick); else c.remove();
+    };
+    requestAnimationFrame(tick);
+  }
+</script>

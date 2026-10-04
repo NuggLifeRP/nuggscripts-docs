@@ -29,6 +29,7 @@ const SITE_FILES = new Set([
   'scripts/check-links.mjs',
   'scripts/check-no-source.mjs',
   'src/styles/custom.css',
+  'scripts/fetch-catalog.mjs',
 ]);
 
 const BLOCKED_EXT = new Set([

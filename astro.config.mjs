@@ -30,9 +30,9 @@ export default defineConfig({
       favicon: '/favicon.png',
       social,
       // Appends a store icon to the header's social links.
-      components: { SocialIcons: './src/components/SocialIcons.astro' },
+      components: { SocialIcons: './src/components/SocialIcons.astro', Hero: './src/components/DocsHero.astro' },
       editLink: { baseUrl: EDIT_BASE },
-      customCss: ['./src/styles/custom.css'],
+      customCss: ['@fontsource-variable/saira/wdth.css', '@fontsource-variable/inter/wght.css', './src/styles/custom.css'],
       lastUpdated: true,
       pagination: true,
       credits: false,
@@ -40,7 +40,7 @@ export default defineConfig({
       head: [
         { tag: 'meta', attrs: { property: 'og:image', content: `${SITE_URL}${BASE_PATH === '/' ? '' : BASE_PATH}/og-default.jpg` } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
-        { tag: 'meta', attrs: { name: 'theme-color', content: '#0b0710' } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: '#020906' } },
         {
           // Open links that leave the site in a new tab, so the docs stay put.
           // Done here rather than with a markdown plugin because Starlight
@@ -56,7 +56,7 @@ export default defineConfig({
         {
           label: 'Start here',
           items: [
-            { label: 'Welcome', link: '/' },
+            { label: 'Welcome', link: '/docs/' },
             { label: 'Before you install', link: '/start/before-you-install/' },
             { label: 'Downloading your purchase', link: '/start/downloading/' },
             { label: 'Common install mistakes', link: '/start/common-mistakes/' },
