@@ -70,22 +70,44 @@ export function initCountdowns() {
   }
 }
 
-/* Click-to-load YouTube: nothing from YouTube loads until the visitor asks. */
+/* Click-to-load YouTube in a full-screen overlay. Nothing from YouTube loads
+   until the visitor asks, and while the video plays the page underneath is
+   covered and every effect is paused. */
 export function initVideoFacades() {
+  const cinema = document.getElementById('ns-cinema');
+  const frame = cinema?.querySelector<HTMLElement>('.cinema-frame');
+  if (!cinema || !frame) return;
+  let opener: HTMLElement | null = null;
+  const close = () => {
+    frame.replaceChildren();
+    cinema.classList.remove('open');
+    cinema.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('video-open');
+    dispatchEvent(new CustomEvent('ns-video', { detail: { open: false } }));
+    opener?.focus();
+  };
+  const open = (id: string, el: HTMLElement) => {
+    opener = el;
+    const f = document.createElement('iframe');
+    f.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+    f.title = 'Showcase video';
+    f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    f.allowFullscreen = true;
+    frame.replaceChildren(f);
+    document.documentElement.classList.add('video-open');
+    dispatchEvent(new CustomEvent('ns-video', { detail: { open: true } }));
+    cinema.classList.add('open');
+    cinema.setAttribute('aria-hidden', 'false');
+    cinema.querySelector<HTMLButtonElement>('.close')?.focus();
+  };
+  cinema.querySelector('.close')?.addEventListener('click', close);
+  cinema.addEventListener('click', (e) => { if (e.target === cinema) close(); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && cinema.classList.contains('open')) close(); });
   for (const el of $$('[data-yt]')) {
     const id = el.dataset.yt;
     if (!id) continue;
-    const go = () => {
-      const f = document.createElement('iframe');
-      f.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
-      f.title = 'Showcase video';
-      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
-      f.allowFullscreen = true;
-      el.replaceChildren(f);
-      el.removeAttribute('role'); el.removeAttribute('tabindex');
-    };
-    el.addEventListener('click', go, { once: true });
-    el.addEventListener('keydown', (e) => { if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') { e.preventDefault(); go(); } }, { once: true });
+    el.addEventListener('click', () => open(id, el));
+    el.addEventListener('keydown', (e) => { const k = (e as KeyboardEvent).key; if (k === 'Enter' || k === ' ') { e.preventDefault(); open(id, el); } });
   }
 }
 

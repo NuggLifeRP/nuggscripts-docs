@@ -81,7 +81,7 @@ export const products: Product[] = raw.packages
       discount: p.discount,
       image: p.image,
       media: p.media,
-      description: clean(p.description),
+      description: clean(p.description).replace(/rgb\(\s*143,\s*171,\s*155\s*\)|#8fab9b/gi, '#2fd27a'),
       updated: p.updated,
       docs: meta.docs,
       video: meta.video,

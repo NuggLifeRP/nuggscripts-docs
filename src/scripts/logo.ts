@@ -31,6 +31,11 @@ function nativeAlpha(host: HTMLElement) {
   return true;
 }
 
+addEventListener('ns-video', (e) => {
+  const open = !!(e as CustomEvent).detail?.open;
+  document.querySelectorAll<HTMLVideoElement>('.logo video, .logo-video').forEach((v) => (open ? v.pause() : v.play().catch(() => {})));
+});
+
 export function stackedLogo(host: HTMLElement) {
   const poster = host.querySelector('img');
   if (reduced()) return;
@@ -43,6 +48,7 @@ export function stackedLogo(host: HTMLElement) {
   else if (v.canPlayType('video/mp4; codecs="hvc1.2.4.L120.90"') || v.canPlayType('video/mp4; codecs="hvc1"')) v.src = hevc;
   else return;
   v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto'; v.crossOrigin = 'anonymous';
+  addEventListener('ns-video', (e) => { if ((e as CustomEvent).detail?.open) v.pause(); else if (visible && !document.hidden) play(); });
   v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
 
   const canvas = document.createElement('canvas');
@@ -84,12 +90,13 @@ a=clamp((a-.015)/.97,0.,1.);gl_FragColor=vec4(c*a,a);}`;
   let lastT = -1, started = false;
   const pump = () => {
     if (failed) return;
-    if (visible && !document.hidden && v.readyState >= 2 && v.currentTime !== lastT) { lastT = v.currentTime; draw(); }
+    if (visible && !document.hidden && !document.documentElement.classList.contains('video-open') && v.readyState >= 2 && v.currentTime !== lastT) { lastT = v.currentTime; draw(); }
     requestAnimationFrame(pump);
   };
   let tries = 0;
   const play = (): void => {
     if (!started) return;
+    if (document.documentElement.classList.contains('video-open')) return;
     v.play().catch((e) => {
       host.dataset.state = `blocked:${e.name}`;
       if (e.name === 'AbortError' && tries++ < 5) setTimeout(() => { if (visible && !document.hidden) play(); }, 400);

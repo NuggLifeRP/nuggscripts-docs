@@ -42,6 +42,9 @@ export function softwareGL() {
    and everything else keep animating. Listeners read `perfLevel()`. */
 let level = 2;
 export const perfLevel = () => level;
+let videoOpen = false;
+addEventListener('ns-video', (e) => { videoOpen = !!(e as CustomEvent).detail?.open; });
+export const paused = () => videoOpen;
 export function governor() {
   if (reduced()) return;
   let frames = 0, start = 0, settled = false;
@@ -139,7 +142,7 @@ void main(){
   let raf = 0;
   const frame = (now: number) => {
     if (!still) raf = requestAnimationFrame(frame);
-    if (now - last < minStep) return;
+    if (videoOpen || now - last < minStep) return;
     last = now;
     mx += (tx - mx) * 0.08; my += (ty - my) * 0.08;
     gl.uniform1f(uT, still ? 12 : (now - t0) / 1000);
@@ -194,7 +197,7 @@ export function embers(canvas: HTMLCanvasElement) {
   function tick(now: number) {
     if (!visible || document.hidden || !ps.length) { running = false; return; }
     requestAnimationFrame(tick);
-    if (now - last < minStep) return;
+    if (videoOpen || now - last < minStep) return;
     last = now;
     ctx!.clearRect(0, 0, W, H);
     ctx!.globalCompositeOperation = 'lighter';
@@ -303,7 +306,6 @@ export function countUp() {
 export function chrome() {
   const header = document.querySelector('.ns-header');
   const bar = document.getElementById('ns-progress');
-  const halo = document.querySelector<HTMLElement>('.ns-halo');
   const onScroll = () => {
     header?.classList.toggle('is-stuck', scrollY > 8);
     const max = document.documentElement.scrollHeight - innerHeight;
@@ -313,15 +315,6 @@ export function chrome() {
   addEventListener('scroll', onScroll, { passive: true });
   addEventListener('hashchange', onScroll);
   addEventListener('load', () => setTimeout(onScroll, 50));
-  if (halo && fine() && !reduced()) {
-    let x = -999, y = -999, cx = x, cy = y, on = false;
-    const loop = () => {
-      cx += (x - cx) * 0.18; cy += (y - cy) * 0.18;
-      halo.style.transform = `translate3d(${cx.toFixed(1)}px, ${cy.toFixed(1)}px, 0)`;
-      if (Math.abs(x - cx) + Math.abs(y - cy) > 0.5) requestAnimationFrame(loop); else on = false;
-    };
-    addEventListener('pointermove', (e) => { x = e.clientX; y = e.clientY; if (!on) { on = true; requestAnimationFrame(loop); } }, { passive: true });
-  }
   const menu = document.querySelector<HTMLButtonElement>('.menu-btn');
   const nav = document.querySelector('.nav');
   menu?.addEventListener('click', () => { const o = nav?.classList.toggle('open'); menu.setAttribute('aria-expanded', String(!!o)); });
