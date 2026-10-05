@@ -30,7 +30,7 @@ export default defineConfig({
       favicon: '/favicon.png',
       social,
       // Appends a store icon to the header's social links.
-      components: { SocialIcons: './src/components/SocialIcons.astro', Hero: './src/components/DocsHero.astro', SkipLink: './src/components/DocsSkipLink.astro' },
+      components: { SocialIcons: './src/components/SocialIcons.astro', Hero: './src/components/DocsHero.astro', SkipLink: './src/components/DocsSkipLink.astro', ThemeProvider: './src/components/DocsThemeProvider.astro', ThemeSelect: './src/components/DocsThemeSelect.astro' },
       editLink: { baseUrl: EDIT_BASE },
       customCss: ['@fontsource-variable/saira/wdth.css', '@fontsource-variable/inter/wght.css', './src/styles/custom.css'],
       lastUpdated: true,
