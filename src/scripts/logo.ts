@@ -1,4 +1,4 @@
-import { reduced } from './fx';
+import { reduced, softwareGL } from './fx';
 
 /* Plays the animated logo with real transparency in every browser.
    The video stores colour in its top half and alpha in its bottom half
@@ -9,11 +9,34 @@ import { reduced } from './fx';
 const GAP = 16;
 const START = 3;
 
+/* Without a GPU, copying every video frame into WebGL is the most expensive
+   thing on the page. Desktop Chromium can composite a VP9 video with real
+   alpha natively, which costs far less, so it gets that instead. */
+function nativeAlpha(host: HTMLElement) {
+  const brands = (navigator as any).userAgentData?.brands as { brand: string }[] | undefined;
+  const chromiumDesktop = !!brands?.some((b) => /Chromium/i.test(b.brand)) && !(navigator as any).userAgentData?.mobile;
+  if (!chromiumDesktop || !softwareGL() || !host.dataset.webm) return false;
+  const v = document.createElement('video');
+  if (!v.canPlayType('video/webm; codecs="vp9"')) return false;
+  v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
+  v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true');
+  v.className = 'logo-video';
+  v.src = host.dataset.webm;
+  v.addEventListener('loadedmetadata', () => { v.currentTime = START; }, { once: true });
+  v.addEventListener('seeked', () => {
+    host.appendChild(v);
+    v.play().then(() => { host.classList.add('is-live'); host.dataset.state = 'live-native'; }).catch(() => {});
+  }, { once: true });
+  new IntersectionObserver(([e]) => { if (e.isIntersecting) v.play().catch(() => {}); else v.pause(); }).observe(host);
+  return true;
+}
+
 export function stackedLogo(host: HTMLElement) {
   const poster = host.querySelector('img');
   if (reduced()) return;
+  if (nativeAlpha(host)) return;
   const v = document.createElement('video');
-  const small = host.getBoundingClientRect().width * Math.min(2, devicePixelRatio || 1) <= 440;
+  const small = softwareGL() || host.getBoundingClientRect().width * Math.min(2, devicePixelRatio || 1) <= 440;
   const size = small ? 'mobile' : 'desktop';
   const av1 = host.dataset.av1!.replace('{size}', size), hevc = host.dataset.hevc!.replace('{size}', size);
   if (v.canPlayType('video/mp4; codecs="av01.0.05M.10"')) v.src = av1;
@@ -98,12 +121,14 @@ a=clamp((a-.015)/.97,0.,1.);gl_FragColor=vec4(c*a,a);}`;
 /* The logo leans toward the pointer and floats. */
 export function parallax(el: HTMLElement) {
   if (reduced() || !matchMedia('(hover: hover)').matches) return;
-  let tx = 0, ty = 0, x = 0, y = 0;
-  addEventListener('pointermove', (e) => { tx = (e.clientX / innerWidth - 0.5) * 2; ty = (e.clientY / innerHeight - 0.5) * 2; }, { passive: true });
+  let tx = 0, ty = 0, x = 0, y = 0, on = false;
   const loop = () => {
-    x += (tx - x) * 0.06; y += (ty - y) * 0.06;
+    x += (tx - x) * 0.1; y += (ty - y) * 0.1;
     el.style.setProperty('--lx', x.toFixed(3)); el.style.setProperty('--ly', y.toFixed(3));
-    requestAnimationFrame(loop);
+    if (Math.abs(tx - x) + Math.abs(ty - y) > 0.002) requestAnimationFrame(loop); else on = false;
   };
-  loop();
+  addEventListener('pointermove', (e) => {
+    tx = (e.clientX / innerWidth - 0.5) * 2; ty = (e.clientY / innerHeight - 0.5) * 2;
+    if (!on) { on = true; requestAnimationFrame(loop); }
+  }, { passive: true });
 }

@@ -176,7 +176,7 @@ const year = new Date().getFullYear();
     <script type="application/json" id="ns-catalog" set:html={JSON.stringify(storeData())} />
     <script type="application/json" id="ns-index" set:html={JSON.stringify(index)} />
     <script>
-      import { aurora, chrome, reveal, splitText, tilt, magnetic, countUp, startLights, motionToggle } from '../scripts/fx';
+      import { aurora, chrome, reveal, splitText, tilt, magnetic, countUp, startLights, motionToggle, governor } from '../scripts/fx';
       import { initUI } from '../scripts/ui';
       startLights();
       const field = document.getElementById('ns-field') as HTMLCanvasElement | null;
@@ -189,6 +189,7 @@ const year = new Date().getFullYear();
       countUp();
       initUI();
       motionToggle();
+      governor();
     </script>
   </body>
 </html>

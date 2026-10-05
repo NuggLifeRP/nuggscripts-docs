@@ -29,9 +29,10 @@
 @keyframes breathe { 50% { transform: scale(1.08); opacity: .8; } }
 .stage .logo { position: absolute; inset: 0; transform: translate(calc(var(--lx) * 14px), calc(var(--ly) * 10px)) rotateY(calc(var(--lx) * 6deg)); animation: float 7s ease-in-out infinite; }
 @keyframes float { 50% { translate: 0 -12px; } }
-.stage .logo img, .stage .logo canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 20px 40px rgba(0, 0, 0, .55)) drop-shadow(0 0 30px rgba(47, 210, 122, .25)); }
-.stage .logo canvas { opacity: 0; transition: opacity .6s; }
-.stage .logo.is-live canvas { opacity: 1; }
+.stage .logo img, .stage .logo canvas, .stage .logo video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.stage .logo img { filter: drop-shadow(0 20px 40px rgba(0, 0, 0, .55)) drop-shadow(0 0 30px rgba(47, 210, 122, .25)); }
+.stage .logo canvas, .stage .logo video { opacity: 0; transition: opacity .6s; }
+.stage .logo.is-live canvas, .stage .logo.is-live video { opacity: 1; }
 .stage .logo.is-live img { opacity: 0; transition: opacity .6s .2s; }
 .stage .floor { position: absolute; left: 12%; right: 12%; bottom: -2%; height: 9%; border-radius: 50%; background: radial-gradient(ellipse, rgba(47, 210, 122, .35), transparent 70%); filter: blur(10px); }
 

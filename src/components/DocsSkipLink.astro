@@ -7,7 +7,8 @@ import Default from '@astrojs/starlight/components/SkipLink.astro';
 <canvas id="ns-field" class="docs-field" aria-hidden="true"></canvas>
 
 <script>
-  import { aurora } from '../scripts/fx';
+  import { aurora, governor } from '../scripts/fx';
   const field = document.getElementById('ns-field') as HTMLCanvasElement | null;
   if (field) aurora(field, 0.55);
+  governor();
 </script>

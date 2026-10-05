@@ -20,18 +20,64 @@ export function motionToggle() {
 }
 const fine = () => matchMedia('(hover: hover) and (pointer: fine)').matches;
 
+/* Machines without a GPU run WebGL on a CPU rasteriser (WARP, SwiftShader,
+   llvmpipe). Effects stay on there, but at a cost the CPU can afford. */
+let tier: 'software' | 'hardware' | undefined;
+export function softwareGL() {
+  if (tier) return tier === 'software';
+  tier = 'hardware';
+  try {
+    const gl = document.createElement('canvas').getContext('webgl');
+    const ext = gl?.getExtension('WEBGL_debug_renderer_info');
+    const name = ext ? String(gl!.getParameter(ext.UNMASKED_RENDERER_WEBGL)) : '';
+    if (!gl || /swiftshader|basic render|llvmpipe|softpipe|warp|software/i.test(name)) tier = 'software';
+    gl?.getExtension('WEBGL_lose_context')?.loseContext();
+  } catch { tier = 'software'; }
+  return tier === 'software';
+}
+
+/* Frame-rate governor. After load it measures how fast the page really
+   draws (only while visible). Below 40 fps the smoke gets cheaper and the
+   embers stop; below 24 fps the smoke gets cheaper again. The logo, ticker
+   and everything else keep animating. Listeners read `perfLevel()`. */
+let level = 2;
+export const perfLevel = () => level;
+export function governor() {
+  if (reduced()) return;
+  let frames = 0, start = 0, settled = false;
+  const sample = (now: number) => {
+    if (settled) return;
+    if (document.hidden) { start = 0; frames = 0; requestAnimationFrame(sample); return; }
+    if (!start) { start = now; frames = 0; requestAnimationFrame(sample); return; }
+    frames++;
+    if (now - start < 2500) { requestAnimationFrame(sample); return; }
+    const fps = (frames * 1000) / (now - start);
+    const next = fps < 24 ? 0 : fps < 40 ? 1 : 2;
+    if (next < level) {
+      level = next;
+      document.documentElement.dataset.perf = String(level);
+      dispatchEvent(new CustomEvent('ns-perf', { detail: { level, fps: Math.round(fps) } }));
+      if (level > 0) { start = 0; frames = 0; requestAnimationFrame(sample); return; }
+    }
+    settled = true;
+  };
+  setTimeout(() => requestAnimationFrame(sample), 1500);
+}
+
 /* Race-green aurora: a full-screen fragment shader of domain-warped noise,
    rendered at reduced resolution and paused whenever the tab is hidden. */
 export function aurora(canvas: HTMLCanvasElement, gain = 1) {
+  const soft = softwareGL();
   const gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' });
   if (!gl) { canvas.remove(); return; }
   const vs = `attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
   const fs = `precision mediump float;
+#define OCT ${soft ? 3 : 5}
 uniform vec2 r;uniform float t;uniform vec2 m;uniform float s;uniform float g;
 float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float n(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);
 return mix(mix(h(i),h(i+vec2(1,0)),u.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),u.x),u.y);}
-float fb(vec2 p){float v=0.,a=.5;for(int k=0;k<5;k++){v+=a*n(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}
+float fb(vec2 p){float v=0.,a=.5;for(int k=0;k<OCT;k++){v+=a*n(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}
 void main(){
  vec2 uv=gl_FragCoord.xy/r;vec2 p=(gl_FragCoord.xy-.5*r)/r.y;
  float tt=t*.11;
@@ -70,8 +116,9 @@ void main(){
   gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
   const uR = gl.getUniformLocation(pr, 'r'), uT = gl.getUniformLocation(pr, 't'), uM = gl.getUniformLocation(pr, 'm'), uS = gl.getUniformLocation(pr, 's'), uG = gl.getUniformLocation(pr, 'g');
   gl.uniform1f(uG, gain);
-  const scale = 0.5;
-  let W = 0, H = 0, mx = 0, my = 0, tx = 0, ty = 0, scroll = 0;
+  let scale = soft ? 0.1 : 0.3;
+  let minStep = 1000 / (soft ? 20 : 30) - 2;
+  let W = 0, H = 0, mx = 0, my = 0, tx = 0, ty = 0, scroll = 0, last = 0;
   const size = () => {
     W = Math.max(1, Math.floor(innerWidth * scale)); H = Math.max(1, Math.floor(innerHeight * scale));
     canvas.width = W; canvas.height = H; gl.viewport(0, 0, W, H); gl.uniform2f(uR, W, H);
@@ -79,18 +126,26 @@ void main(){
   };
   size();
   addEventListener('resize', size, { passive: true });
+  addEventListener('ns-perf', () => {
+    const l = perfLevel();
+    scale = Math.min(scale, l === 0 ? 0.06 : 0.1);
+    minStep = 1000 / (l === 0 ? 12 : 20) - 2;
+    size();
+  });
   addEventListener('pointermove', (e) => { tx = e.clientX * scale; ty = H - e.clientY * scale; }, { passive: true });
   addEventListener('scroll', () => { scroll = Math.min(1, scrollY / (innerHeight * 1.5)); }, { passive: true });
   const t0 = performance.now();
   const still = reduced();
   let raf = 0;
   const frame = (now: number) => {
-    mx += (tx - mx) * 0.05; my += (ty - my) * 0.05;
+    if (!still) raf = requestAnimationFrame(frame);
+    if (now - last < minStep) return;
+    last = now;
+    mx += (tx - mx) * 0.08; my += (ty - my) * 0.08;
     gl.uniform1f(uT, still ? 12 : (now - t0) / 1000);
     gl.uniform2f(uM, mx, my);
     gl.uniform1f(uS, scroll);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
-    if (!still) raf = requestAnimationFrame(frame);
   };
   raf = requestAnimationFrame(frame);
   document.addEventListener('visibilitychange', () => {
@@ -118,15 +173,29 @@ export function embers(canvas: HTMLCanvasElement) {
   };
   size();
   new ResizeObserver(size).observe(canvas);
-  const count = Math.min(110, Math.floor((W * H) / (9000 * dpr * dpr)));
+  const count = Math.min(softwareGL() ? 45 : 110, Math.floor((W * H) / (9000 * dpr * dpr)));
   for (let i = 0; i < count; i++) ps.push(spawn(true));
   let px = -1e9, py = -1e9;
   canvas.parentElement?.addEventListener('pointermove', (e) => { const b = canvas.getBoundingClientRect(); px = (e.clientX - b.left) * dpr; py = (e.clientY - b.top) * dpr; }, { passive: true });
   canvas.parentElement?.addEventListener('pointerleave', () => { px = py = -1e9; });
-  let visible = true;
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) requestAnimationFrame(tick); }).observe(canvas);
-  function tick() {
-    if (!visible || document.hidden) return;
+  const sprite = (col: string) => {
+    const c = document.createElement('canvas'); c.width = c.height = 64;
+    const x = c.getContext('2d')!; const g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.addColorStop(0, `rgba(${col},1)`); g.addColorStop(0.35, `rgba(${col},.45)`); g.addColorStop(1, `rgba(${col},0)`);
+    x.fillStyle = g; x.fillRect(0, 0, 64, 64); return c;
+  };
+  const GOLD = sprite('247,224,23'), GREEN = sprite('47,210,122');
+  const minStep = 1000 / (softwareGL() ? 24 : 60) - 2;
+  let visible = true, running = false, last = 0;
+  const start = () => { if (!running && visible && !document.hidden) { running = true; requestAnimationFrame(tick); } };
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; start(); }).observe(canvas);
+  document.addEventListener('visibilitychange', start);
+  addEventListener('ns-perf', () => { if (perfLevel() < 2) { ps.length = 0; ctx!.clearRect(0, 0, W, H); } });
+  function tick(now: number) {
+    if (!visible || document.hidden || !ps.length) { running = false; return; }
+    requestAnimationFrame(tick);
+    if (now - last < minStep) return;
+    last = now;
     ctx!.clearRect(0, 0, W, H);
     ctx!.globalCompositeOperation = 'lighter';
     for (let i = 0; i < ps.length; i++) {
@@ -136,15 +205,14 @@ export function embers(canvas: HTMLCanvasElement) {
       p.vx *= 0.96; p.vy = p.vy * 0.96 - 0.03;
       p.x += p.vx + Math.sin((p.life + i * 13) * 0.02) * 0.25; p.y += p.vy; p.life++;
       const a = Math.sin((p.life / p.max) * Math.PI);
-      const g = ctx!.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
-      const col = p.gold ? '247,224,23' : '47,210,122';
-      g.addColorStop(0, `rgba(${col},${0.9 * a})`); g.addColorStop(1, `rgba(${col},0)`);
-      ctx!.fillStyle = g; ctx!.beginPath(); ctx!.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2); ctx!.fill();
+      const sz = p.r * 8;
+      ctx!.globalAlpha = Math.max(0, a * 0.9);
+      ctx!.drawImage(p.gold ? GOLD : GREEN, p.x - sz / 2, p.y - sz / 2, sz, sz);
       if (p.life > p.max || p.y < -20) ps[i] = spawn();
     }
-    requestAnimationFrame(tick);
+    ctx!.globalAlpha = 1;
   }
-  requestAnimationFrame(tick);
+  start();
 }
 
 /* 3D tilt, glare and a gradient border that follows the pointer. */
@@ -211,6 +279,8 @@ export function reveal(root: ParentNode = document) {
     for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
   els.forEach((e) => io.observe(e));
+  // Anything already on screen at load is shown even if the observer is slow to report.
+  setTimeout(() => els.forEach((e) => { if (e.getBoundingClientRect().top < innerHeight) e.classList.add('in'); }), 1200);
 }
 
 export function countUp() {
@@ -242,10 +312,13 @@ export function chrome() {
   onScroll();
   addEventListener('scroll', onScroll, { passive: true });
   if (halo && fine() && !reduced()) {
-    let x = -999, y = -999, cx = x, cy = y;
-    addEventListener('pointermove', (e) => { x = e.clientX; y = e.clientY; }, { passive: true });
-    const loop = () => { cx += (x - cx) * 0.12; cy += (y - cy) * 0.12; halo.style.setProperty('--hx', `${cx}px`); halo.style.setProperty('--hy', `${cy}px`); requestAnimationFrame(loop); };
-    loop();
+    let x = -999, y = -999, cx = x, cy = y, on = false;
+    const loop = () => {
+      cx += (x - cx) * 0.18; cy += (y - cy) * 0.18;
+      halo.style.transform = `translate3d(${cx.toFixed(1)}px, ${cy.toFixed(1)}px, 0)`;
+      if (Math.abs(x - cx) + Math.abs(y - cy) > 0.5) requestAnimationFrame(loop); else on = false;
+    };
+    addEventListener('pointermove', (e) => { x = e.clientX; y = e.clientY; if (!on) { on = true; requestAnimationFrame(loop); } }, { passive: true });
   }
   const menu = document.querySelector<HTMLButtonElement>('.menu-btn');
   const nav = document.querySelector('.nav');

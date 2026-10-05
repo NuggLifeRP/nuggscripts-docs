@@ -72,8 +72,8 @@ body.ns {
   position: fixed; left: 0; top: 0; width: 520px; height: 520px; margin: -260px 0 0 -260px; z-index: -1;
   pointer-events: none; border-radius: 50%;
   background: radial-gradient(circle, rgba(47, 210, 122, .13), rgba(247, 224, 23, .04) 40%, transparent 68%);
-  transform: translate3d(var(--hx, -999px), var(--hy, -999px), 0);
-  transition: opacity .4s;
+  transform: translate3d(-999px, -999px, 0);
+  will-change: transform;
 }
 @media (hover: none) { .ns-halo { display: none; } }
 
