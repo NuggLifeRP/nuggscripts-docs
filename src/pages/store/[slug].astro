@@ -72,7 +72,7 @@ const description = p.description
         </div>
         <div class="actions">
           <button class="btn btn-primary" type="button" data-add={p.id} data-label="Add to cart" data-magnetic><span class="lbl">Add to cart</span></button>
-          <button class="btn btn-gold" type="button" data-buy={p.id} data-magnetic>Buy now</button>
+          <button class="btn btn-gold" type="button" data-buy={p.id} data-magnetic>{p.price === 0 ? 'Get it free' : 'Buy now'}</button>
         </div>
         {inBundles.map(({ b, v }) => (
           <a class="upsell" href={b.href}>Also in the <b>{b.short}</b> — {v.parts.length} products for {money(b.price)}, <b>save {money(v.save)}</b> →</a>

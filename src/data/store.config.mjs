@@ -114,6 +114,15 @@ export const PRODUCTS = {
     tags: ['30+ props', 'Inventory icons'],
     order: 21,
   },
+  7717284: {
+    slug: 'recycle-machine-prop',
+    short: 'Recycle Machine',
+    kind: 'props',
+    pitch: 'A branded recycle machine with eight placements around the map — free and open source.',
+    tags: ['Free', 'Open source', '8 placements'],
+    badge: 'Free',
+    order: 19,
+  },
   6847269: {
     slug: 'soda-props',
     short: 'Soda Prop Bundle',

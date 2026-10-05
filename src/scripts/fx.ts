@@ -311,6 +311,8 @@ export function chrome() {
   };
   onScroll();
   addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('hashchange', onScroll);
+  addEventListener('load', () => setTimeout(onScroll, 50));
   if (halo && fine() && !reduced()) {
     let x = -999, y = -999, cx = x, cy = y, on = false;
     const loop = () => {

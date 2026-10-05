@@ -99,7 +99,7 @@ export const products: Product[] = raw.packages
 
 export const byId = new Map(products.map((p) => [p.id, p]));
 
-export const money = (n: number) => `$${n.toFixed(2)}`;
+export const money = (n: number) => (n === 0 ? 'Free' : `$${n.toFixed(2)}`);
 
 export function bundleValue(p: Product) {
   const parts = p.parts.map((id) => byId.get(id)).filter(Boolean) as Product[];

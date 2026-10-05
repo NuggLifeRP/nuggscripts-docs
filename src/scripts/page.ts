@@ -95,6 +95,10 @@ export function initGallery() {
   const main = g.querySelector<HTMLImageElement>('.main img')!;
   const mainBox = g.querySelector<HTMLElement>('.main')!;
   const thumbs = $$<HTMLButtonElement>('.thumbs button', g);
+  // Portrait or square shots are shown whole instead of cropped to the 16:10 frame.
+  const fitMode = () => { main.classList.toggle('fit', main.naturalWidth > 0 && main.naturalWidth / main.naturalHeight < 1.3); };
+  main.addEventListener('load', fitMode);
+  if (main.complete) fitMode();
   thumbs.forEach((t) => t.addEventListener('click', () => {
     thumbs.forEach((x) => x.setAttribute('aria-current', String(x === t)));
     main.style.opacity = '0';

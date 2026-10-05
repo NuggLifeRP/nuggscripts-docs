@@ -15,7 +15,7 @@ const store = {
 
 const catalog: Item[] = JSON.parse(document.getElementById('ns-catalog')?.textContent || '[]');
 const byId = new Map(catalog.map((p) => [p.id, p]));
-const money = (n: number) => `$${n.toFixed(2)}`;
+const money = (n: number) => (n === 0 ? 'Free' : `$${n.toFixed(2)}`);
 
 let cart: number[] = store.get<number[]>(CART_KEY, []).filter((id) => byId.has(id));
 const listeners = new Set<() => void>();

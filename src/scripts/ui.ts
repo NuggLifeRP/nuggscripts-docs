@@ -54,7 +54,7 @@ function render() {
       <div class="swap"><b>Save ${Cart.money(s.save)}</b> — the <b>${esc(s.bundle.short)}</b> includes ${s.parts.map((p) => esc(p.short)).join(' + ')} for ${Cart.money(s.bundle.price)}.
         <div style="margin-top:10px"><button class="btn btn-gold btn-sm" data-swap="${s.bundle.id}">Switch to the bundle</button></div></div>`).join('');
   }
-  $('.tot .price', drawer)!.textContent = Cart.money(Cart.total());
+  $('.tot .price', drawer)!.textContent = items.length ? Cart.money(Cart.total()) : '$0.00';
   const go = $<HTMLButtonElement>('[data-checkout]', drawer)!;
   go.disabled = !items.length;
 }
