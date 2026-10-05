@@ -41,6 +41,7 @@ export default defineConfig({
         { tag: 'meta', attrs: { property: 'og:image', content: `${SITE_URL}${BASE_PATH === '/' ? '' : BASE_PATH}/og-default.jpg` } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
         { tag: 'meta', attrs: { name: 'theme-color', content: '#020906' } },
+        { tag: 'meta', attrs: { name: 'darkreader-lock' } },
         {
           // The footer switch on the store pages turns animation off site-wide.
           tag: 'script',

@@ -136,13 +136,7 @@ body.ns {
 }
 .kicker::before { content: ''; width: 26px; height: 3px; border-radius: 3px; background: linear-gradient(90deg, var(--gold) 0 45%, transparent 45% 60%, var(--rg-400) 60%); }
 .lede { font-size: clamp(16px, 1.6vw, 19px); color: var(--text); max-width: 60ch; }
-.shine {
-  background: linear-gradient(100deg, var(--white) 20%, var(--rg-300) 40%, var(--gold) 50%, var(--rg-300) 60%, var(--white) 80%);
-  background-size: 250% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
-  animation: shine 6s linear infinite;
-}
-@keyframes shine { from { background-position: 100% 0; } to { background-position: -150% 0; } }
-.gtext { background: linear-gradient(90deg, var(--rg-400), var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.shine, .gtext { color: var(--rg-400); }
 
 .section { position: relative; padding: clamp(64px, 9vw, 120px) 0; }
 .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 48px); }
@@ -330,7 +324,7 @@ body.ns {
 
 html.motion-off { scroll-behavior: auto; }
 html.motion-off .reveal, html.motion-off .split .ch { opacity: 1 !important; transform: none !important; filter: none !important; transition: none !important; }
-html.motion-off .shine, html.motion-off .stage .logo, html.motion-off .stage .ring, html.motion-off .stage .glow { animation: none !important; }
+html.motion-off .stage .logo, html.motion-off .stage .ring, html.motion-off .stage .glow { animation: none !important; }
 html.motion-off .card { transform: none !important; }
 html.motion-off .lights { display: none !important; }
 
