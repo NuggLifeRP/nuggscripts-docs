@@ -32,6 +32,26 @@ The animated logo in `public/media/` is a stacked-alpha video (colour on top, al
 below, 16 px gap) in AV1 with an HEVC fallback, recombined by a WebGL shader in
 `src/scripts/logo.ts`. Every effect honours the visitor's reduced-motion setting.
 
+## Security
+
+The site is static (GitHub Pages) and holds no secret: the only Tebex value in the
+repo is the **public** token, which can read the catalogue and create baskets and
+nothing else. No one can reach the Tebex account through this site.
+
+- **Content-Security-Policy** on every page (`scripts/csp.mjs`, run by `npm run build`):
+  scripts only from this site and `js.tebex.io`, Starlight's inline scripts allowed by
+  exact SHA-256 hash, frames only Tebex checkout and YouTube, API calls only Tebex.
+- **Tebex descriptions are sanitised** at build (`src/lib/catalog.ts`): no scripts,
+  event handlers, frames, forms or non-https links.
+- **CI**: actions pinned to commit SHAs, read-only token for the build, Pages write only
+  in the deploy job, checkout token not persisted, Dependabot for npm and actions,
+  `check:source` before every build.
+- `js.tebex.io` sends no CORS header, so Subresource Integrity cannot be used on it;
+  it is allowed by origin in the CSP instead.
+
+The real attack surface is the accounts: GitHub (`NuggLifeRP`), Tebex, Cloudflare
+(domain + DNS), Cfx.re and the email behind them. Keep 2FA on all of them.
+
 ## Documentation only
 
 **This repository is public. The scripts it documents are paid, escrowed
