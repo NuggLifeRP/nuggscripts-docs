@@ -1,4 +1,5 @@
 import raw from '../data/catalog.json';
+import sanitizeHtml from 'sanitize-html';
 import { PRODUCTS, CATEGORY_KIND, KINDS, STORE } from '../data/store.config.mjs';
 
 export type Kind = keyof typeof KINDS;
@@ -30,6 +31,29 @@ export interface Product {
   searchText: string;
 }
 
+/* Descriptions come from Tebex, which sanitises them already. They are cleaned
+   again here so that nothing able to run code can reach a page even if the
+   Tebex account were ever misused: no scripts, frames, forms or event handlers,
+   and links and images only over https. */
+const clean = (html: string) =>
+  sanitizeHtml(html, {
+    allowedTags: ['p', 'br', 'hr', 'div', 'span', 'strong', 'b', 'em', 'i', 'u', 's', 'small', 'sup', 'sub', 'code', 'pre',
+      'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'a', 'img', 'table', 'thead', 'tbody', 'tfoot',
+      'tr', 'td', 'th', 'caption', 'colgroup', 'col', 'figure', 'figcaption'],
+    allowedAttributes: {
+      '*': ['style', 'class', 'title', 'align'],
+      a: ['href', 'target', 'rel'],
+      img: ['src', 'alt', 'width', 'height', 'loading', 'decoding'],
+      td: ['colspan', 'rowspan', 'width'],
+      th: ['colspan', 'rowspan', 'width'],
+      col: ['span', 'width'],
+    },
+    allowedSchemes: ['https', 'mailto'],
+    allowedSchemesByTag: { img: ['https'] },
+    allowProtocolRelative: false,
+    transformTags: { a: sanitizeHtml.simpleTransform('a', { rel: 'noopener noreferrer' }, true) },
+  });
+
 const slugify = (s: string) =>
   s.toLowerCase().normalize('NFKD').replace(/[^\w\s-]/g, '').trim().replace(/[\s_]+/g, '-').replace(/-+/g, '-');
 
@@ -57,7 +81,7 @@ export const products: Product[] = raw.packages
       discount: p.discount,
       image: p.image,
       media: p.media,
-      description: p.description,
+      description: clean(p.description),
       updated: p.updated,
       docs: meta.docs,
       video: meta.video,

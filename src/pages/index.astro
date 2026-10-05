@@ -167,8 +167,9 @@ const yt = featured?.video?.match(/(?:youtu\.be\/|v=)([\w-]{11})/)?.[1];
           return (
             <a class="tile reveal" href={`/store/#${k.key}`} style={`--d:${i * 90}ms`}>
               <div class="bg">{list.map((p) => <img src={p.image} alt="" loading="lazy" />)}</div>
-              <span class="n">{String(k.count).padStart(2, '0')}</span>
+              <span class="n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
               <div class="in">
+                <span class="lane">Lane {String(i + 1).padStart(2, '0')} · {k.count} {k.count === 1 ? 'product' : 'products'}</span>
                 <h3 class="display">{k.plural}</h3>
                 <p>{k.blurb}</p>
                 <span class="go">Open {k.plural.toLowerCase()} →</span>

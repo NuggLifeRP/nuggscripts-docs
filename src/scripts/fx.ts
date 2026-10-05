@@ -1,21 +1,41 @@
-export const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* Motion is on unless the visitor turns it off with the footer switch. The OS
+   "reduce motion" setting is not used: this site's animation is its brand, and
+   the switch gives anyone who needs stillness a one-click way to get it. */
+export const reduced = () => document.documentElement.classList.contains('motion-off');
+
+export function motionToggle() {
+  const btn = document.querySelector<HTMLButtonElement>('[data-motion-toggle]');
+  if (!btn) return;
+  const sync = () => {
+    const off = reduced();
+    btn.setAttribute('aria-pressed', String(!off));
+    btn.querySelector('.state')!.textContent = off ? 'Off' : 'On';
+  };
+  sync();
+  btn.addEventListener('click', () => {
+    const off = !reduced();
+    try { localStorage.setItem('ns-motion', off ? 'off' : 'on'); } catch {}
+    location.reload();
+  });
+}
 const fine = () => matchMedia('(hover: hover) and (pointer: fine)').matches;
 
 /* Race-green aurora: a full-screen fragment shader of domain-warped noise,
    rendered at reduced resolution and paused whenever the tab is hidden. */
-export function aurora(canvas: HTMLCanvasElement) {
+export function aurora(canvas: HTMLCanvasElement, gain = 1) {
   const gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' });
   if (!gl) { canvas.remove(); return; }
   const vs = `attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
   const fs = `precision mediump float;
-uniform vec2 r;uniform float t;uniform vec2 m;uniform float s;
+uniform vec2 r;uniform float t;uniform vec2 m;uniform float s;uniform float g;
 float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float n(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);
 return mix(mix(h(i),h(i+vec2(1,0)),u.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),u.x),u.y);}
 float fb(vec2 p){float v=0.,a=.5;for(int k=0;k<5;k++){v+=a*n(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}
 void main(){
  vec2 uv=gl_FragCoord.xy/r;vec2 p=(gl_FragCoord.xy-.5*r)/r.y;
- float tt=t*.045;
+ float tt=t*.11;
+ p+=vec2(.05*sin(t*.07),-t*.035);
  vec2 q=vec2(fb(p*1.6+tt),fb(p*1.6-tt+3.1));
  vec2 w=vec2(fb(p*1.3+2.*q+vec2(1.7,9.2)+tt*1.3),fb(p*1.3+2.*q+vec2(8.3,2.8)-tt));
  float f=fb(p*1.2+2.4*w);
@@ -31,7 +51,8 @@ void main(){
  c+=brg*band*.25;
  float vig=smoothstep(1.25,.25,length((uv-.5)*vec2(1.1,1.35)));
  c*=mix(.35,1.,vig);
- c*=1.-s*.45;
+ c*=1.-s*.18;
+ c=bg+(c-bg)*g;
  gl_FragColor=vec4(c,1.);
 }`;
   const sh = (type: number, src: string) => { const o = gl.createShader(type)!; gl.shaderSource(o, src); gl.compileShader(o); return o; };
@@ -47,7 +68,8 @@ void main(){
   const loc = gl.getAttribLocation(pr, 'p');
   gl.enableVertexAttribArray(loc);
   gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-  const uR = gl.getUniformLocation(pr, 'r'), uT = gl.getUniformLocation(pr, 't'), uM = gl.getUniformLocation(pr, 'm'), uS = gl.getUniformLocation(pr, 's');
+  const uR = gl.getUniformLocation(pr, 'r'), uT = gl.getUniformLocation(pr, 't'), uM = gl.getUniformLocation(pr, 'm'), uS = gl.getUniformLocation(pr, 's'), uG = gl.getUniformLocation(pr, 'g');
+  gl.uniform1f(uG, gain);
   const scale = 0.5;
   let W = 0, H = 0, mx = 0, my = 0, tx = 0, ty = 0, scroll = 0;
   const size = () => {

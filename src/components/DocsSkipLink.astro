@@ -1,0 +1,13 @@
+---
+// Starlight's skip link, plus the race-green smoke canvas behind every docs page.
+import Default from '@astrojs/starlight/components/SkipLink.astro';
+---
+
+<Default />
+<canvas id="ns-field" class="docs-field" aria-hidden="true"></canvas>
+
+<script>
+  import { aurora } from '../scripts/fx';
+  const field = document.getElementById('ns-field') as HTMLCanvasElement | null;
+  if (field) aurora(field, 0.55);
+</script>

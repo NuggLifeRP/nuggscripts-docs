@@ -64,28 +64,25 @@
 
 /* Backdrop ------------------------------------------------------------------ */
 
-:root[data-theme='dark'] body {
-  background:
-    radial-gradient(60rem 40rem at 85% -10%, rgba(19, 160, 88, 0.16), transparent 60%),
-    radial-gradient(50rem 30rem at -10% 20%, rgba(0, 66, 37, 0.35), transparent 60%),
-    var(--sl-color-bg);
-  background-attachment: fixed;
+:root[data-theme='dark'] {
+  background: #020906;
 }
 
-:root[data-theme='dark'] body::before {
-  content: '';
+:root[data-theme='dark'] body {
+  background: transparent;
+}
+
+.docs-field {
   position: fixed;
-  inset: -20%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(40% 30% at 30% 30%, rgba(47, 210, 122, 0.07), transparent 70%),
-    radial-gradient(35% 25% at 70% 60%, rgba(247, 224, 23, 0.035), transparent 70%);
-  animation: nugg-drift 26s ease-in-out infinite alternate;
 }
 
-@keyframes nugg-drift {
-  to { transform: translate3d(4%, -3%, 0) rotate(8deg); }
+:root[data-theme='light'] .docs-field {
+  display: none;
 }
 
 /* Navigation ------------------------------------------------------------- */
@@ -309,12 +306,9 @@ h1#_top {
   color: var(--sl-color-gray-3);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  :root[data-theme='dark'] body::before,
-  .hero > img,
-  .hero h1 {
-    animation: none;
-  }
+html.motion-off .hero > img,
+html.motion-off .hero h1 {
+  animation: none;
 }
 
 /* Animated logo on the docs landing page --------------------------------- */
@@ -410,9 +404,7 @@ h1#_top {
   to { rotate: 1turn; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .docs-stage .ring,
-  .docs-stage .logo {
-    animation: none;
-  }
+html.motion-off .docs-stage .ring,
+html.motion-off .docs-stage .logo {
+  animation: none;
 }

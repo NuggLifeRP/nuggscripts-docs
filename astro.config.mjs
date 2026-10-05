@@ -30,7 +30,7 @@ export default defineConfig({
       favicon: '/favicon.png',
       social,
       // Appends a store icon to the header's social links.
-      components: { SocialIcons: './src/components/SocialIcons.astro', Hero: './src/components/DocsHero.astro' },
+      components: { SocialIcons: './src/components/SocialIcons.astro', Hero: './src/components/DocsHero.astro', SkipLink: './src/components/DocsSkipLink.astro' },
       editLink: { baseUrl: EDIT_BASE },
       customCss: ['@fontsource-variable/saira/wdth.css', '@fontsource-variable/inter/wght.css', './src/styles/custom.css'],
       lastUpdated: true,
@@ -41,6 +41,11 @@ export default defineConfig({
         { tag: 'meta', attrs: { property: 'og:image', content: `${SITE_URL}${BASE_PATH === '/' ? '' : BASE_PATH}/og-default.jpg` } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
         { tag: 'meta', attrs: { name: 'theme-color', content: '#020906' } },
+        {
+          // The footer switch on the store pages turns animation off site-wide.
+          tag: 'script',
+          content: `try{if(localStorage.getItem('ns-motion')==='off')document.documentElement.classList.add('motion-off')}catch(e){}`,
+        },
         {
           // Open links that leave the site in a new tab, so the docs stay put.
           // Done here rather than with a markdown plugin because Starlight

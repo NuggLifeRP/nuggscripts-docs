@@ -37,6 +37,7 @@ const year = new Date().getFullYear();
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>try{if(localStorage.getItem('ns-motion')==='off')document.documentElement.classList.add('motion-off')}catch(e){}</script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -129,6 +130,7 @@ const year = new Date().getFullYear();
         </div>
         <div class="fine">
           <span>© {year} NuggScripts. Payments, tax and delivery are handled by Tebex, the merchant of record.</span>
+          <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="true">Animations: <span class="state">On</span></button>
           <span>Log in with the Cfx.re account that owns your server key. Not affiliated with Rockstar Games, Take-Two Interactive or Cfx.re.</span>
         </div>
       </div>
@@ -174,7 +176,7 @@ const year = new Date().getFullYear();
     <script type="application/json" id="ns-catalog" set:html={JSON.stringify(storeData())} />
     <script type="application/json" id="ns-index" set:html={JSON.stringify(index)} />
     <script>
-      import { aurora, chrome, reveal, splitText, tilt, magnetic, countUp, startLights } from '../scripts/fx';
+      import { aurora, chrome, reveal, splitText, tilt, magnetic, countUp, startLights, motionToggle } from '../scripts/fx';
       import { initUI } from '../scripts/ui';
       startLights();
       const field = document.getElementById('ns-field') as HTMLCanvasElement | null;
@@ -186,6 +188,7 @@ const year = new Date().getFullYear();
       magnetic();
       countUp();
       initUI();
+      motionToggle();
     </script>
   </body>
 </html>

@@ -1,0 +1,11 @@
+# Weekly pull requests for outdated or vulnerable build dependencies and actions.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
