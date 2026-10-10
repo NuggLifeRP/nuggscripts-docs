@@ -22,6 +22,37 @@ No config changes; `Config.Version` stays 1.
 - `config.lua.example` named the backdrops `.png`; the shipped files are `.jpg`.
 - `html/fonts/` now carries `NOTICE.txt`, `OFL.txt` and `LICENSE-APACHE-2.0.txt`,
   the copyright notices and licence texts the bundled fonts require.
+- **0.00 ms in the world.** The backdrop's draw loop used to keep running for the
+  whole session after a character was picked, waking twenty times a second to
+  find nothing to draw. It now starts with the character screen and ends with it,
+  so once a player is in the world the resource has nothing scheduled at all.
+- **Less memory on every client.** Only the active language and English, which
+  is the per-key fallback, are kept once the language is resolved; the other
+  locale files are released. `mcdiag` still lists every language that loaded.
+  The server does the same.
+- The character screen's working data (the line-up, property cards and creator
+  state) is released when the player spawns, and the heap is collected while the
+  screen is still black, so nothing from the screen is carried into the world.
+  With `Config.Debug` on, the F8 console prints the heap size at that point.
+- **Cheaper character screens.** The backdrop panel is now worked out only when
+  the camera or the line-up moves, and replayed unchanged on every other frame.
+  A still frame used to cost eleven native calls and a fresh allocation; it now
+  costs the four draw calls and nothing else, with a screen-resolution check
+  every fifteenth frame so resizing the game window still re-fits the image.
+- **The arrival point picker no longer runs while idle.** Its preview worker
+  used to poll every 50 ms and its camera loop ran every frame from the moment
+  the picker opened, re-sending even a fixed authored shot sixty times a second.
+  The preview now starts from a highlight, the camera loop runs only while a
+  location is being orbited, and an authored shot is set once.
+- The heap is collected while the screen is still black each time the
+  selection screen or the creator opens, so the memory column reflects what
+  the screen is actually holding.
+- `fxmanifest.lua` now declares `nui_callback_strict_mode 'true'`. Only this
+  resource's own page can call its NUI callbacks; another resource's page
+  calling them is refused by the game.
+- On QBCore and Qbox, and for housing scripts on every framework, character
+  lists are passed to the database as one bound parameter (`IN (?)`) instead of
+  a placeholder string built into the SQL text.
 
 ---
 
