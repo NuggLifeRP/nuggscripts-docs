@@ -78,10 +78,16 @@ const yt = featured?.video?.match(/(?:youtu\.be\/|v=)([\w-]{11})/)?.[1];
           <p class="reveal">The newest script on the grid, with a launch price that ends on a real date.</p>
         </div>
         <div class="spot reveal">
-          <div class="vid" data-yt={yt} role="button" tabindex="0" aria-label="Play the showcase video">
-            <Image src={mcVideo} alt="nuggs_multicharacter showcase" widths={[640, 960, 1280]} sizes="(max-width: 860px) 100vw, 60vw" />
-            <span class="play" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg></span>
-          </div>
+          {yt ? (
+            <div class="vid" data-yt={yt} role="button" tabindex="0" aria-label="Play the showcase video">
+              <Image src={mcVideo} alt="nuggs_multicharacter showcase" widths={[640, 960, 1280]} sizes="(max-width: 860px) 100vw, 60vw" />
+              <span class="play" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg></span>
+            </div>
+          ) : (
+            <a class="vid" href={featured.href}>
+              <Image src={mcVideo} alt={featured.short} widths={[640, 960, 1280]} sizes="(max-width: 860px) 100vw, 60vw" />
+            </a>
+          )}
           <div class="info">
             <div class="chips">
               <span class="chip gold">{featured.badge ?? 'Featured'}</span>
