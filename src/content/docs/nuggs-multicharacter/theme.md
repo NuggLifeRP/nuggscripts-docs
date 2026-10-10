@@ -49,8 +49,8 @@ is optional and independent.
 
 **Backdrop.** `Config.Scene.backdrop` puts a still image behind the characters
 instead of the world. Two ship and are on by default:
-`html/images/CharacterSelectionBackground.png` and
-`CharacterCreationBackground.png`. Swap either for any PNG or JPG in `html/images`
+`html/images/CharacterSelectionBackground.jpg` and
+`CharacterCreationBackground.jpg`. Swap either for any PNG or JPG in `html/images`
 — nothing to stream, no `.ytd` to build. `/ccbackdrop` toggles it, and
 `enabled = false` goes back to the world showing through.
 
