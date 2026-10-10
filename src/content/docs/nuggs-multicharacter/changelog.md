@@ -12,6 +12,19 @@ between your version and the current one.
 
 ---
 
+## 1.0.1 — config version 1
+
+No config changes; `Config.Version` stays 1.
+
+- The selection backdrop's street sign now reads WELCOME TO LOS SANTOS.
+- The creator backdrop is now the same street scene, with no vehicle in it.
+  If you replaced either file with your own, keep yours.
+- `config.lua.example` named the backdrops `.png`; the shipped files are `.jpg`.
+- `html/fonts/` now carries `NOTICE.txt`, `OFL.txt` and `LICENSE-APACHE-2.0.txt`,
+  the copyright notices and licence texts the bundled fonts require.
+
+---
+
 ## 1.0.0 — config version 1
 
 First public release. `fxmanifest.lua` declares `version '1.0.0'` and `config.lua`
