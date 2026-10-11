@@ -32,6 +32,7 @@ export const PRODUCTS = {
     pitch: 'Character selection, creation and arrival points in one resource — and it sells character slots for you.',
     tags: ['ESX Legacy', 'QBCore', 'Qbox', 'No ox_lib'],
     docs: '/nuggs-multicharacter/',
+    video: 'https://youtu.be/WhN81UpS158',
     featured: true,
     badge: 'New',
     promo: { text: 'Launch price — $29.99 after October 25, 2026', until: '2026-10-26T00:00:00Z' },
