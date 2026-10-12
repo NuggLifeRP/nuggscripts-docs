@@ -104,4 +104,22 @@ AddEventHandler('nuggs_multicharacter:characterCreated', function(src, slot, cha
 end)
 ```
 
+### Give every new character a vms_housing starter apartment
+
+vms_housing hands out starter apartments when the multicharacter tells it a
+character was created. Set up `Config.StarterApartments` in vms_housing first,
+then add this to `customer_server.lua` or any server script of your own. `charKey`
+is exactly the identifier vms_housing expects: the character identifier on ESX,
+the citizenid on QBCore and Qbox.
+
+```lua
+AddEventHandler('nuggs_multicharacter:characterCreated', function(src, slot, charKey)
+    if GetResourceState('vms_housing') == 'started' then
+        exports['vms_housing']:AddStarterApartment(charKey)
+    end
+end)
+```
+
+The apartment's card is on the arrival rail from that character's next login.
+
 ---

@@ -48,11 +48,30 @@ script to let them in, so the interior, stash, wardrobe and routing bucket are a
 set up by the resource that owns them.
 
 Read with no configuration at all: **`qbx_properties`**, **`ps-housing`**,
-**`qb-apartments`**, **`qb-houses`** and **`esx_property`**.
+**`qb-apartments`**, **`qb-houses`**, **`esx_property`** and **`vms_housing`**.
 
 Ownership is read from the housing script's own table and checked again on the way
 in. Nothing here creates, buys, sells or deletes a property, and no housing table
 is ever written to.
+
+#### vms_housing
+
+Read through vms_housing's own exports, so it works on ESX, QBCore and Qbox with
+nothing to set up beyond vms_housing's own install.
+
+- Every property a character **owns or rents** gets a card, with the name, region
+  and description set in vms_housing, plus `RENTED` and `SHARED` tags.
+- The card lands the character at the property's door, then vms_housing's own
+  `EnterProperty` lets them in. A flat inside a building uses the building's door,
+  and an MLO property uses its menu point. These are the same doors vms_housing's
+  own spawn selector uses.
+- A character who logged out **inside** a vms_housing property skips the arrival
+  picker and spawns where they left off. vms_housing then puts them back inside
+  by itself, which is what its `Config.TeleportToLastPropertyOnJoin` asks a spawn
+  selector to allow. This needs the `last_property` column from vms_housing's SQL;
+  without it, the console says so and the picker is shown as normal.
+- Starter apartments are given by vms_housing's `AddStarterApartment`. To give one
+  to every new character, see **INTEGRATION.md → Recipes**.
 
 **Anything else** goes in `Config.Housing.custom` — naming the table and three
 columns is usually the whole integration:

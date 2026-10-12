@@ -11,7 +11,7 @@ sidebar:
 | Detected by | `es_extended` | `qb-core` | `qbx_core` |
 | A character is | a `users` row keyed `charN:<licence>` | a `players` row keyed on `citizenid` | same |
 | An account is | the bare licence | `license:1a2b…` | `license2:1a2b…`, falling back to `license:` |
-| Slot number lives in | the identifier prefix | `players`.`cid` | same |
+| Slot number lives in | the identifier prefix | `players`.`cid` and `charinfo.cid`, repaired when two characters share one | same |
 | Appearance stored in | `users`.`skin` + `users`.`tattoos` | `multicharacter_characters`, mirrored to `playerskins` | same |
 | `playerskins` format | — | qb-clothing | illenium-appearance |
 | Creator drives | `skinchanger` | the ped directly | the ped directly |

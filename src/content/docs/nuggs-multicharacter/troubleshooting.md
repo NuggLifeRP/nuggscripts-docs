@@ -63,6 +63,28 @@ Keymaster.
 The `.fxap` or a `.lua` was corrupted by an FTP client in ASCII mode. Re-upload in
 **binary** mode, or use SFTP.
 
+**Console says it repaired the slot number of some characters**
+
+That account had characters sharing a `cid`, or with none, which is what Qbox
+before its own createCharacter fix left behind. Each character's `cid` and
+`charinfo.cid` were set to the slot its card is shown in. It happens once per
+account and needs nothing from you.
+
+**A player was disconnected with "The character that loaded was not the one you
+picked"**
+
+The framework loaded a different character from the one on the card, and the
+player was stopped before playing it. The console line names both. Something
+other than this resource is logging characters in: another multicharacter, a
+spawn or housing script calling the framework's login, or `qbx_core` with
+`useExternalCharacters = false`. Turn that off and the player can reconnect.
+
+**ESX: the console says a `users` row is not in the form ESX loads characters by**
+
+ESX only loads `char<slot>:<licence>`. A row like `char01:` from an import or a
+hand edit cannot be played, so it is not shown. Rename it to the form in the
+message if it should be.
+
 **Nothing at all in the console**
 
 Turn on `Config.Debug` and restart. Two character screens fighting over one ped
@@ -163,6 +185,18 @@ SQL. A character who owns nothing gets no card, which is correct.
 Either the housing script has no cross-resource entry point (`esx_property` is the
 one that does not, by design) or it was still loading. Raise
 `Config.Housing.enterDelay`.
+
+**vms_housing: no arrival picker for one character**
+
+That character logged out inside a vms_housing property, so `last_property` is set
+and vms_housing puts them back inside by itself. The picker returns once they have
+left the property.
+
+**vms_housing: the console says `last_property` is missing**
+
+The `ALTER TABLE` line from vms_housing's SQL was not run on `users` (ESX) or
+`players` (QBCore and Qbox). Property cards still work. Run that line to let
+vms_housing put players back inside the property they logged out in.
 
 **Home card appears for a property that was sold**
 

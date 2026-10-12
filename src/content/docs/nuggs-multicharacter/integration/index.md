@@ -73,7 +73,7 @@ To fix: stop the server, rename the folder, make sure `server.cfg` says
 | Clothing override | `Config.Appearance.driver`, `.resource`, `.publish`, `.custom` |
 | Tattoos | `rcore_tattoos`, `vms_tattooshop`, `crm-tattoos`, `qb-tattooshop`, `esx_tattooshop`, or anything in `Config.Appearance.tattooCustom`. With none installed the clothing resource keeps the ink |
 | Tattoo override | `Config.Appearance.tattooResource`, `.tattooCustom`, `.tattooKey`, `.tattooCreator`, `.tattooSync` |
-| Housing / motels | `qbx_properties`, `ps-housing`, `qb-apartments`, `qb-houses`, `esx_property`, or anything in `Config.Housing.custom` |
+| Housing / motels | `qbx_properties`, `ps-housing`, `qb-apartments`, `qb-houses`, `esx_property`, `vms_housing`, or anything in `Config.Housing.custom` |
 | Housing override | `Config.Housing.script`, `.custom` |
 | Wardrobes (ESX) | the `property` datastore — `esx_clotheshop`, `esx_property`, anything reading `dressing` |
 | Wardrobes (QB/Qbox) | `player_outfits` — `illenium-appearance`, `fivem-appearance`, `qb-clothing` and the housing scripts on top of them |
@@ -115,6 +115,11 @@ up by the resource that owns them.
 Ownership is read from the housing script's own table and checked again on the way
 in. Nothing creates, buys, sells or deletes a property, and no housing table is
 written to. See README.md under **Starting at home**.
+
+`vms_housing` is read through its `GetPlayerProperties` and `GetProperty` exports
+and entered through `EnterProperty`, called by this resource on the server once the
+player is standing at the door. A character whose `last_property` is set skips the
+picker so that vms_housing can put them back inside.
 
 ### Starter outfits
 

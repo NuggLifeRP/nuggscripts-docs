@@ -114,7 +114,7 @@ cash, bank, playtime, lastSeen, skin, position, tattoos, disabled }`.
 | `GetClothingResource` | `()` | `table?` — `{ id, resource, store }`, nil when nothing detected |
 | `GetTattooResource` | `()` | `table?` — `{ id, resource, owns, identity }`, nil when no dedicated tattoo resource is running |
 | `GetCharacterTattoos` | `(charKey, identifier?)` | `any?` — that resource's own list for one character. `nil` means "no answer" |
-| `GetHousingScripts` | `()` | `table[]` — `{ id, resource, table }` per running housing script |
+| `GetHousingScripts` | `()` | `table[]` — `{ id, resource, table }` per running housing script. `table` is nil for one read through its exports (`vms_housing`) |
 | `GetCharacterProperties` | `(charKey)` | `table[]` — `{ id, key, adapter, label, kind, coords }` |
 
 - `store` on `GetClothingResource` says where the appearance actually lives:

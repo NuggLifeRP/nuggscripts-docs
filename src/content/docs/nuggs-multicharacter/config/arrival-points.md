@@ -80,12 +80,18 @@ Ownership is read from the housing script's own table and checked again on the w
 in. **Nothing here creates, buys, sells or deletes a property.**
 
 Supported with no configuration: `qbx_properties`, `ps-housing`, `qb-apartments`,
-`qb-houses`, `esx_property`. Anything else goes in `custom`.
+`qb-houses`, `esx_property`, `vms_housing`. Anything else goes in `custom`.
+
+`vms_housing` is read through its own exports rather than a table, includes
+properties the character rents, and is entered through its `EnterProperty`
+export. A character who logged out inside one of its properties skips the picker
+so vms_housing can put them back in. README.md under **Starting at home** has the
+details.
 
 | Option | Notes |
 | --- | --- |
 | `enabled` | Off, and no housing table is ever read |
-| `script` | `"auto"` for every one running, `"none"` for the same as off, or name one: `"qbx_properties"`, `"ps-housing"`, `"qb-apartments"`, `"qb-houses"`, `"esx_property"`, or a `custom` id |
+| `script` | `"auto"` for every one running, `"none"` for the same as off, or name one: `"qbx_properties"`, `"ps-housing"`, `"qb-apartments"`, `"qb-houses"`, `"esx_property"`, `"vms_housing"`, or a `custom` id |
 | `maxCards` | Most cards to show across every housing script |
 | `enterDelay` | How long after the player is in the world before knocking, in ms. Every one of these teleports the player itself, and being moved while still spawning puts somebody under the map. Raise it on a heavy server |
 | `propertyAccent` | Accent colour for property cards |
@@ -98,7 +104,7 @@ Nothing on one is authored:
 | Line | Where it comes from |
 | --- | --- |
 | Name | The housing script's label column, falling back to the property key |
-| Area | The street and district the game reports at the front door. A script that stores its own region (ps-housing does) is believed ahead of that |
+| Area | The street and district the game reports at the front door. A script that stores its own region (ps-housing and vms_housing do) is believed ahead of that |
 | Tag | `HOME`, `APARTMENT`, `PENTHOUSE`, `MOTEL`, `TRAILER`, `ROOM`, `GARAGE`, `WAREHOUSE`, `OFFICE`, `CLUBHOUSE`, `BOAT` or `PROPERTY`, read from the type column, interior name and label in that order. Plus `RENTED` and `SHARED` where recorded |
 | Description | Whatever the housing script stores, otherwise one sentence per kind with the street or district in it |
 | Artwork | The zone the door is in, then the kind, then the nearest authored arrival point |
@@ -130,7 +136,8 @@ is usually the whole integration.
 | `defaultKind` | What a row is when nothing else identifies it: `"house"`, `"apartment"`, `"motel"`, `"trailer"`, `"room"`, `"penthouse"`, `"garage"`, `"warehouse"`, `"office"`, `"clubhouse"`, `"boat"` or `"property"` (default) |
 | `enterServer` | The **server** event the client should trigger to go in |
 | `enterClient` | The **client** event the server should trigger instead, for a script whose entry point does not read `source` |
-| `enterArgs` | What that event wants: `"plain"` (just the key, default) or `"qbx"` (`{ id = key, isSpawn = true }`) |
+| `enterExport` | A **server** export to call instead, as `(playerId, ...)` with the arguments from `enterArgs`. Called by this resource once the player is in the world, and only for the character the card was picked for |
+| `enterArgs` | What that entry point wants: `"plain"` (just the key, default) or `"qbx"` (`{ id = key, isSpawn = true }`) |
 
 ```lua
 custom = {
@@ -145,8 +152,8 @@ custom = {
 ```
 
 Every field below `key` is optional, and a column named here that does not exist is
-dropped rather than breaking the query. With neither `enterServer` nor
-`enterClient`, the player is landed at the door coordinates.
+dropped rather than breaking the query. With none of `enterServer`, `enterClient`
+or `enterExport`, the player is landed at the door coordinates.
 
 A list of these tables handles several scripts. Leave it `nil` when unused.
 

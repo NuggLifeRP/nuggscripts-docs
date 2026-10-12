@@ -12,6 +12,80 @@ between your version and the current one.
 
 ---
 
+## 1.0.3 — config version 1
+
+No config changes; `Config.Version` stays 1. The comment above `Config.Housing`
+now lists `vms_housing` with the other built-in housing scripts.
+
+- **The character on the card you click is always the character that loads.** On
+  QBCore and Qbox the line-up placed characters by their `cid`, but a click looked
+  the slot up again with `WHERE cid = ?`, and the two disagreed whenever an
+  account had characters sharing a `cid` or with none. Qbox before its own
+  createCharacter fix left every character on `cid` 1, and a row written without
+  the column keeps it empty while `charinfo.cid` still holds the slot. On those
+  accounts, picking character 1 could load character 4, with nothing in the error
+  log. Every slot is now worked out in one place and the click, delete and every
+  export read the same answer.
+- Those accounts are repaired the first time their line-up is drawn: each
+  character's `cid` and `charinfo.cid` are set to the slot its card is in, once,
+  and the console says so. A character that is currently loaded is left alone.
+- On ESX, a `users` row the framework cannot load for that slot (`char01:` next
+  to `char1:`, for example) is no longer shown in place of the real one. It is
+  left out and named once in the console.
+- The click is checked against the line-up the player was actually shown. If the
+  slot has changed since — a character added, deleted or edited by staff — nobody
+  is loaded and the player gets a fresh line-up.
+- As a last safeguard, a player whose framework loads any character other than
+  the one they picked is disconnected before they can play it, and the console
+  says which character was picked and which loaded.
+- **vms_housing is supported.** Every property a character owns or rents gets an
+  arrival card, with its name, region, description and a `RENTED` or `SHARED` tag
+  where it applies. Choosing one lands the character at that property's door and
+  lets them in through vms_housing's own `EnterProperty`. A flat inside a building
+  uses the building's door, and an MLO property uses its menu point, the same
+  doors vms_housing's own spawn selector uses. Ownership is read through
+  vms_housing's exports and checked again when the card is picked.
+- A character who logged out inside a vms_housing property skips the arrival
+  picker, as vms_housing asks spawn selectors to, so it can put them back inside
+  that property itself.
+- `Config.Housing.custom` takes a new `enterExport`, for a housing script whose
+  entry point is a server export rather than an event.
+- The arrival point is now always sent by the server. Before, a refused property
+  card could leave the client holding the door coordinates it had picked.
+
+---
+
+## 1.0.2 — config version 1
+
+No config changes; `Config.Version` stays 1.
+
+- **No more `CPed::SetVariation: Invalid variation` in F8 while building a
+  character.** A garment's texture is now brought into range for the new
+  garment before the garment itself changes. Before, stepping a spinner, opening
+  the tattoo step, picking a suggested outfit or pressing RANDOMIZE could put a
+  garment on with a texture it does not have — legs 21 with texture 1, say — and
+  skinchanger re-applies every garment on each change, so one bad pair was sent
+  again with every click until a spinner caught it.
+- Opening the creator and switching between male and female no longer sends
+  the starting clothes before they have been checked against the model.
+  `Config.Default` can name any texture: one past the end of its garment is
+  pulled back to the last that exists, and a garment the model does not have is
+  taken off, rather than either reaching the game.
+- The same check covers the character line-up and, on QBCore and Qbox, the
+  creator's own driver, so a saved character wearing a garment from a clothing
+  pack the server no longer streams is shown without it instead of raising the
+  error.
+- **The backdrop is in place on the first frame of every screen.** Moving
+  between selection, the creator and the arrival point picker could leave the
+  image fitted to the camera the screen had just left, with the game world
+  showing past its edges until it caught up. A still shot is now fitted from the
+  camera the resource placed itself rather than from what the game last
+  rendered, and the image runs a quarter of a screen past every edge, so a camera
+  that is still moving never shows past it either. The picture on screen is
+  framed exactly as before.
+
+---
+
 ## 1.0.1 — config version 1
 
 No config changes; `Config.Version` stays 1.
